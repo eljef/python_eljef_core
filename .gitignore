@@ -1,0 +1,11 @@
+.*
+__pycache__/
+*.py[cod]
+build/
+
+!.gitattributes
+!.gitignore
+!.PROJINFO
+!.idea/dictionaries/eljef_core.xml
+!docs/build/.gitignore
+!docs/source/_static/.gitignore
