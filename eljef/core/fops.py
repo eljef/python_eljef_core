@@ -15,9 +15,7 @@
 #
 # fops.py : Directory, File, and Filesystem operations
 
-import base64
 import errno
-import hashlib
 import logging
 import os
 import shutil
@@ -29,7 +27,6 @@ from typing import Union
 from typing import List
 
 LOGGER = logging.getLogger(__name__)
-BLOCK_SIZE = 65536
 
 
 def makestr(data: AnyStr) -> str:
@@ -80,27 +77,6 @@ def delete(path: str, follow: bool=False) -> None:
     except (IOError, OSError) as err:
         if err.errno != errno.ENOENT:
             raise
-
-
-def encode_base64(path: str) -> str:
-    """Reads a file and converts the data to a base64 encode string
-
-    Args:
-        path: File to base64 encode contents of
-
-    Raises:
-        FileNotFoundError: When file does not exist
-        IOError: When specified path is not a file
-
-    Returns:
-        Base64 encoded data as a string
-    """
-    if not os.path.exists(path):
-        raise FileNotFoundError("Specified file does not exist: %s" % path)
-    if not os.path.isfile(path):
-        raise IOError("Specified path is not a file: %s" % path)
-    with open(path, 'rb') as file_data:
-        return makestr(base64.b64encode(file_data.read()))
 
 
 def extract(file: str, path: str) -> None:
@@ -209,64 +185,6 @@ def file_write(path: str, data: AnyStr) -> None:
         total_chars = open_file.write(makestr(data))
 
     LOGGER.debug("Wrote %s characters", str(total_chars))
-
-
-def hash_md5(path: str) -> str:
-    """Creates a MD5 hash for ``path``
-
-    Args:
-        path: Full path to file to create hash for.
-
-    Returns:
-        string form of MD5 hash
-
-    Raises:
-        FileNotFoundError: When file does not exist
-        IOError: When specified path is not a file
-    """
-    if not os.path.exists(path):
-        raise FileNotFoundError("Specified file does not exist: %s" % path)
-    if not os.path.isfile(path):
-        raise IOError("Specified path is not a file: %s" % path)
-
-    LOGGER.debug("Generating MD5 hash for %s", path)
-    h_md5 = hashlib.md5()
-    with open(path, 'rb') as hash_file:
-        buf = hash_file.read(BLOCK_SIZE)
-        while len(buf) > 0:
-            h_md5.update(buf)
-            buf = hash_file.read(BLOCK_SIZE)
-
-    return makestr(h_md5.hexdigest())
-
-
-def hash_sha256(path: str) -> str:
-    """Creates a SHA256 hash for `path`
-
-    Args:
-        path: Full path to file to create hash for.
-
-    Returns:
-        string form of SHA256 hash
-
-    Raises:
-        FileNotFoundError: When file does not exist
-        IOError: When specified path is not a file
-    """
-    if not os.path.exists(path):
-        raise FileNotFoundError("Specified file does not exist: %s" % path)
-    if not os.path.isfile(path):
-        raise IOError("Specified path is not a file: %s" % path)
-
-    LOGGER.debug("Generating SHA256 hash for %s", path)
-    h_sha256 = hashlib.sha256()
-    with open(path, 'rb') as hash_file:
-        buf = hash_file.read(BLOCK_SIZE)
-        while len(buf) > 0:
-            h_sha256.update(buf)
-            buf = hash_file.read(BLOCK_SIZE)
-
-    return makestr(h_sha256.hexdigest())
 
 
 def mkdir(path: str, del_exist: bool=False) -> None:
