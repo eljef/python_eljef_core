@@ -20,7 +20,9 @@ import logging
 import os
 import shutil
 import tarfile
+import xmltodict
 
+from collections import OrderedDict
 from contextlib import contextmanager
 from typing import AnyStr
 from typing import Union
@@ -241,3 +243,49 @@ def pushd(path: str) -> None:
     yield
     os.chdir(cwd)
     LOGGER.debug("popd %s", path)
+
+
+def xml_read(path: str) -> OrderedDict:
+    """Reads and parses an XML file into a python dictionary.
+
+    Args:
+        path: path to XML file to read.
+
+    Returns:
+        Dictionary of parsed XML information as parsed by xmltodict
+
+    Raises:
+        FileNotFoundError: If provided path does not exist
+        FileNotFoundError: If provided path exists but is not a file or a link
+                           to a file.
+        xml.parsers.expat.ExpatError: If the XML file is not valid XML or
+                                      malformed XML.
+    """
+    if not os.path.exists(path):
+        raise FileNotFoundError("Provided path does not exist: %s" % path)
+    if not os.path.isfile(path):
+        raise FileNotFoundError("Provided path exists, but is not a file: %s"
+                                % path)
+
+    f_data = file_read(path)
+    LOGGER.debug("Parsing XML from: %s", path)
+    return xmltodict.parse(f_data)
+
+
+def xml_write(path: str, data_dict: OrderedDict, pretty: bool=True,
+              full_document: bool=True, indent: str='    ') -> None:
+    """Writes an OrderedDict to a file as XML data.
+
+    Args:
+        path: Path to file to write.
+        data_dict: Dictionary of data to convert to XML
+        pretty: If True, write the XML in pretty format with correct
+                white-spacing. (Default is True)
+        full_document: If True, write a full XML document, including headers.
+                       (Default is True)
+        indent: String to use for indenting. (Default is four spaces.)
+    """
+    LOGGER.debug('Converting data to string to write to file.')
+    xml_string = xmltodict.unparse(data_dict, pretty=pretty,
+                                   full_document=full_document, indent=indent)
+    file_write(path, xml_string)

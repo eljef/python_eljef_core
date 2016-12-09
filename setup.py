@@ -17,5 +17,6 @@ setup(
     license='LGPLv2.1',
     author='Jef Oliver',
     author_email='jef.oliver@intel.com',
-    description='Core Functions for various utilities written by Jef Oliver'
+    description='Core Functions for various utilities written by Jef Oliver',
+    install_requires=['xmltodict']
 )
