@@ -13,7 +13,11 @@
 # Authors:
 # Jef Oliver <jef@eljef.me>
 #
-# hash.py : Functions for hashing data
+# hash.py : Functions for encoding and hashing data
+"""ElJef Data Encoding and Hashing
+
+This module holds functions for encoding and hashing data.
+"""
 
 import base64
 import hashlib

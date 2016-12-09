@@ -14,19 +14,25 @@
 # Jef Oliver <jef@eljef.me>
 #
 # fops.py : Directory, File, and Filesystem operations
+"""ElJef Directory, File, and Filesystem operations.
+
+This module holds functions for performing operations on directories, files,
+and filesystems (permissions for directories and files).
+"""
 
 import errno
 import logging
 import os
 import shutil
 import tarfile
-import xmltodict
 
 from collections import OrderedDict
 from contextlib import contextmanager
 from typing import AnyStr
 from typing import Union
 from typing import List
+
+import xmltodict
 
 LOGGER = logging.getLogger(__name__)
 
