@@ -294,4 +294,5 @@ def xml_write(path: str, data_dict: OrderedDict, pretty: bool=True,
     LOGGER.debug('Converting data to string to write to file.')
     xml_string = xmltodict.unparse(data_dict, pretty=pretty,
                                    full_document=full_document, indent=indent)
+    xml_string += os.linesep
     file_write(path, xml_string)
