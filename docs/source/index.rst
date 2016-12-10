@@ -16,6 +16,7 @@ Dependencies
 ElJef Core depends on the following software packages:
 
 * Python 3.5 or newer
+* xmltodict
 
 Core Function Index
 -------------------
