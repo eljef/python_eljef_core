@@ -7,6 +7,7 @@ ElJef Core
 
    eljef.core.fops
    eljef.core.hash
+   eljef.core.network
    eljef.core.settings
 
 
