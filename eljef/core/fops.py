@@ -54,7 +54,30 @@ def makestr(data: AnyStr) -> str:
         return str(data)
 
 
-def delete(path: str, follow: bool=False) -> None:
+def backup_path(path: str) -> None:
+    """Renames a directory/file/link for backup purposes
+
+    This will append the .bak extension to a file. If path.bak exists, a number
+    is appended until a non-existent file is found.
+    ie: file.bak file.bak.1 file.bak.2
+
+    Args:
+        path: Full path to item to backup
+    """
+    base_back = "{}.bak".format(path)
+    new_path = base_back
+    num_backups = 0
+
+    if os.path.exists(path):
+        if os.path.exists(new_path):
+            while os.path.exists(new_path):
+                num_backups += 1
+                new_path = "{0!s}.{1!s}".format(base_back, num_backups)
+        LOGGER.debug("Backing up file: %s -> %s", path, new_path)
+        os.rename(path, new_path)
+
+
+def delete(path: str, follow: bool=False, backup: bool=False) -> None:
     """Delete a directory, file, or link
 
     Deletes a directory, file, or link, ignoring errors if the target does
@@ -65,6 +88,10 @@ def delete(path: str, follow: bool=False) -> None:
         path: Directory, file, or link to delete
         follow: If True, and path is a symlink, the parent for the symlink is
                 deleted as well.
+        backup: If True, backup `path` before deleting. (If `path` is a
+                symlink, the link will still be unlinked, and the parent will
+                be retained instead of being deleted. The parent will need to
+                be backed up or deleted separately.)
     """
     try:
         if os.path.islink(path):
@@ -73,15 +100,18 @@ def delete(path: str, follow: bool=False) -> None:
                 parent = os.path.realpath(path)
             LOGGER.debug("Deleting link %s", path)
             os.unlink(path)
-            if parent:
+            if parent and not backup:
                 LOGGER.debug("Deleting link target %s", parent)
                 delete(parent)
-        elif os.path.isdir(path):
-            LOGGER.debug("Deleting directory %s", path)
-            shutil.rmtree(path)
         else:
-            LOGGER.debug("Deleting file %s", path)
-            os.remove(path)
+            if backup:
+                backup_path(path)
+            if os.path.isdir(path):
+                LOGGER.debug("Deleting directory %s", path)
+                shutil.rmtree(path)
+            else:
+                LOGGER.debug("Deleting file %s", path)
+                os.remove(path)
     except (IOError, OSError) as err:
         if err.errno != errno.ENOENT:
             raise
@@ -179,14 +209,18 @@ def file_read(path: str) -> str:
         return file_data.read()
 
 
-def file_write(path: str, data: AnyStr) -> None:
+def file_write(path: str, data: AnyStr, backup: bool=False) -> None:
     """Write ``data`` to a file
 
     Args:
         path: Full path to the file to write `data` to.
         data: Data to write to `path`
+        backup: Backup the file before writing to it. (Default is False.)
     """
     mode = 'a' if not os.path.isfile(path) else 'w'
+
+    if backup:
+        backup_path(path)
 
     LOGGER.debug("Write to file: %s", path)
     with open(path, mode) as open_file:
@@ -195,7 +229,7 @@ def file_write(path: str, data: AnyStr) -> None:
     LOGGER.debug("Wrote %s characters", str(total_chars))
 
 
-def mkdir(path: str, del_exist: bool=False) -> None:
+def mkdir(path: str, del_exist: bool=False, backup: bool=False) -> None:
     """Creates a directory
 
     Creates a directory, creating all needed subdirectories needed. If the
@@ -206,6 +240,8 @@ def mkdir(path: str, del_exist: bool=False) -> None:
         path: Path to directory to create
         del_exist: If True, and `path` already exists, delete it, then
                    recreate it.
+        backup: If True and `del_exist` is True, backup the existing directory
+                before deleting it.
 
     Raises:
         FileExistsError: If ``path`` exists but is not a directory.
@@ -213,7 +249,7 @@ def mkdir(path: str, del_exist: bool=False) -> None:
     create = False
     if os.path.exists(path):
         if del_exist:
-            delete(path)
+            delete(path, backup=backup)
             create = True
         elif not os.path.isdir(path):
             raise FileExistsError("Path exists, but is not a directory: %s" %
@@ -279,7 +315,8 @@ def xml_read(path: str) -> OrderedDict:
 
 
 def xml_write(path: str, data_dict: OrderedDict, pretty: bool=True,
-              full_document: bool=True, indent: str='    ') -> None:
+              full_document: bool=True, indent: str='    ',
+              backup: bool=False) -> None:
     """Writes an OrderedDict to a file as XML data.
 
     Args:
@@ -290,9 +327,10 @@ def xml_write(path: str, data_dict: OrderedDict, pretty: bool=True,
         full_document: If True, write a full XML document, including headers.
                        (Default is True)
         indent: String to use for indenting. (Default is four spaces.)
+        backup: Backup the file before writing. (Default is False.)
     """
     LOGGER.debug('Converting data to string to write to file.')
     xml_string = xmltodict.unparse(data_dict, pretty=pretty,
                                    full_document=full_document, indent=indent)
     xml_string += os.linesep
-    file_write(path, xml_string)
+    file_write(path, xml_string, backup=backup)
