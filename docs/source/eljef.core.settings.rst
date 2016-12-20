@@ -1,7 +1,7 @@
-eljef.core.hash
-===============
+eljef.core.settings
+===================
 
-.. automodule:: eljef.core.hash
+.. automodule:: eljef.core.settings
     :members:
     :undoc-members:
     :show-inheritance:

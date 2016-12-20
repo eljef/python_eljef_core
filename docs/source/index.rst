@@ -7,6 +7,7 @@ ElJef Core
 
    eljef.core.fops
    eljef.core.hash
+   eljef.core.settings
 
 
 The ElJef Core API provides core functionality that is shared between all
