@@ -25,6 +25,7 @@ import logging
 import os
 import shutil
 import tarfile
+import yaml
 
 from collections import OrderedDict
 from contextlib import contextmanager
@@ -334,3 +335,42 @@ def xml_write(path: str, data_dict: OrderedDict, pretty: bool=True,
                                    full_document=full_document, indent=indent)
     xml_string += os.linesep
     file_write(path, xml_string, backup=backup)
+
+
+def yaml_read(path: str) -> dict:
+    """Reads and parses a YAML file into a python dictionary.
+
+    Args:
+        path: Path to file to read.
+
+    Returns:
+        A dictionary of parsed data.
+
+    Raises:
+        FileNotFoundError: If provided path does not exist
+        FileNotFoundError: If provided path exists but is not a file or a link
+                           to a file.
+    """
+    if not os.path.exists(path):
+        raise FileNotFoundError("Provided path does not exist: %s" % path)
+    if not os.path.isfile(path):
+        raise FileNotFoundError("Provided path exists, but is not a file: %s"
+                                % path)
+
+    f_data = file_read(path)
+    LOGGER.debug("Parsing XML from: %s", path)
+    return yaml.load(f_data)
+
+
+def yaml_write(path: str, data_dict: dict, backup: bool=False) -> None:
+    """Writes a dict to a file as YAML data.
+
+    Args:
+        path: Path to file to write.
+        data_dict: Dictionary of data to convert to YAML.
+        backup: Backup the file before writing. (Default is False.)
+    """
+    LOGGER.debug('Converting data to string to write to file.')
+    yaml_string = yaml.dump(data_dict, default_flow_style=False)
+    yaml_string += os.linesep
+    file_write(path, yaml_string, backup=backup)
