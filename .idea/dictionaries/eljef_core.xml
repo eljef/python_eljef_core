@@ -4,6 +4,7 @@
       <w>allsphinxopts</w>
       <w>applehelp</w>
       <w>archiveformat</w>
+      <w>attrs</w>
       <w>autodoc</w>
       <w>builddir</w>
       <w>coredoc</w>
@@ -18,6 +19,7 @@
       <w>gitattributes</w>
       <w>gitignore</w>
       <w>htmlhelp</w>
+      <w>icmp</w>
       <w>ifeq</w>
       <w>indexsidebar</w>
       <w>latexpdf</w>
@@ -45,6 +47,7 @@
       <w>texinfo</w>
       <w>todos</w>
       <w>xmltodict</w>
+      <w>yaml</w>
     </words>
   </dictionary>
 </component>
