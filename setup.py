@@ -13,10 +13,10 @@ setup(
     name=T_VARS['NAME'],
     version=T_VARS['VERSION'],
     packages=['eljef', 'eljef.core'],
-    url='https://github.com/eljef/eljef_core',
+    url='https://github.com/eljef/python_eljef_core',
     license='LGPLv2.1',
     author='Jef Oliver',
-    author_email='jef.oliver@intel.com',
+    author_email='jef@eljef.me',
     description='Core Functions for various utilities written by Jef Oliver',
     install_requires=['yaml', 'xmltodict']
 )
