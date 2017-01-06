@@ -63,9 +63,9 @@ class Settings(object):
         self._apply_settings()
 
     def _apply_setting(self, setting: str) -> None:
-        if self._settings['user'][setting]:
+        if setting in self._settings['user']:
             setattr(self, setting, self._settings['user'][setting])
-        elif self._settings['system'][setting]:
+        elif setting in self._settings['system']:
             setattr(self, setting, self._settings['system'][setting])
         else:
             setattr(self, setting, self._defaults[setting])
