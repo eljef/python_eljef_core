@@ -18,5 +18,5 @@ setup(
     author='Jef Oliver',
     author_email='jef@eljef.me',
     description='Core Functions for various utilities written by Jef Oliver',
-    install_requires=['yaml', 'xmltodict']
+    install_requires=['pyyaml', 'xmltodict']
 )
