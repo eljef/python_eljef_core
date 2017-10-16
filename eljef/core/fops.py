@@ -65,7 +65,7 @@ def backup_path(path: str) -> None:
     Args:
         path: Full path to item to backup
     """
-    base_back = "{}.bak".format(path)
+    base_back = "{0!s}.bak".format(path)
     new_path = base_back
     num_backups = 0
 
@@ -74,7 +74,7 @@ def backup_path(path: str) -> None:
             while os.path.exists(new_path):
                 num_backups += 1
                 new_path = "{0!s}.{1!s}".format(base_back, num_backups)
-        LOGGER.debug("Backing up file: %s -> %s", path, new_path)
+        LOGGER.debug("Backing up file: {0!s} -> {1!s}".format(path, new_path))
         os.rename(path, new_path)
 
 
@@ -99,19 +99,19 @@ def delete(path: str, follow: bool=False, backup: bool=False) -> None:
             parent = None
             if follow:
                 parent = os.path.realpath(path)
-            LOGGER.debug("Deleting link %s", path)
+            LOGGER.debug("Deleting link {0!s}".format(path))
             os.unlink(path)
             if parent and not backup:
-                LOGGER.debug("Deleting link target %s", parent)
+                LOGGER.debug("Deleting link target {0!s}".format(parent))
                 delete(parent)
         else:
             if backup:
                 backup_path(path)
             if os.path.isdir(path):
-                LOGGER.debug("Deleting directory %s", path)
+                LOGGER.debug("Deleting directory {0!s}".format(path))
                 shutil.rmtree(path)
             else:
-                LOGGER.debug("Deleting file %s", path)
+                LOGGER.debug("Deleting file {0!s}".format(path))
                 os.remove(path)
     except (IOError, OSError) as err:
         if err.errno != errno.ENOENT:
@@ -130,11 +130,12 @@ def extract(file: str, path: str) -> None:
         tarfile.Tarfile: If specified file is not a compressed tar archive
     """
     if not tarfile.is_tarfile(file):
-        raise tarfile.TarError("File is not a compressed tar archive: %s",
-                               file)
+        raise tarfile.TarError("File is not a compressed tar archive:"
+                               " {0!s}".format(file))
     if not os.path.isdir(path):
-        raise FileNotFoundError("Specified path is not a directory: %s", path)
-    LOGGER.debug("Extracting contents of %s to %s", file, path)
+        raise FileNotFoundError("Specified path is not a directory:"
+                                " {0!s}".format(path))
+    LOGGER.debug("Extracting contents of {0!s} to {1!s}".format(file, path))
     with tarfile.open(file) as file_data:
         file_data.extractall(path=path)
 
@@ -154,10 +155,11 @@ def extract_file_list(path: str, ignore_dots: bool=False) -> List[str]:
         tarfile.Tarfile: If specified file is not a compressed tar archive
     """
     if not tarfile.is_tarfile(path):
-        raise tarfile.TarError("File is not a compressed tar archive: %s",
-                               path)
+        raise tarfile.TarError("File is not a compressed tar archive:"
+                               " {0!s}".format(path))
 
-    LOGGER.debug("Extracting file list from archive: %s", path)
+    LOGGER.debug("Extracting file list from archive:"
+                 " {0!s}".format(path))
     with tarfile.open(path) as tar_data:
         file_list = tar_data.getnames()
 
@@ -181,7 +183,8 @@ def file_extract(path: str, file_name: str) -> Union[str, None]:
     Returns:
         Data from ``file_name`` stored as a string or None if not found
     """
-    LOGGER.debug("Extracting file '%s' from archive '%s'", path, file_name)
+    LOGGER.debug("Extracting file '{0!s}' from archive"
+                 " '{1!s}'".format(path, file_name))
     with tarfile.open(path) as tar_data:
         try:
             extracted = tar_data.extractfile(file_name)
@@ -205,7 +208,7 @@ def file_read(path: str) -> str:
     Returns:
         Data from file stored as a string
     """
-    LOGGER.debug("Read file: %s", path)
+    LOGGER.debug("Read file: {0!s}".format(path))
     with open(path, errors='replace') as file_data:
         return file_data.read()
 
@@ -223,11 +226,10 @@ def file_write(path: str, data: AnyStr, backup: bool=False) -> None:
     if backup:
         backup_path(path)
 
-    LOGGER.debug("Write to file: %s", path)
+    LOGGER.debug("Write to file: {0!s}".format(path))
     with open(path, mode) as open_file:
         total_chars = open_file.write(makestr(data))
-
-    LOGGER.debug("Wrote %s characters", str(total_chars))
+        LOGGER.debug("Wrote {0!s} characters".format(total_chars))
 
 
 def mkdir(path: str, del_exist: bool=False, backup: bool=False) -> None:
@@ -253,13 +255,13 @@ def mkdir(path: str, del_exist: bool=False, backup: bool=False) -> None:
             delete(path, backup=backup)
             create = True
         elif not os.path.isdir(path):
-            raise FileExistsError("Path exists, but is not a directory: %s" %
-                                  path)
+            raise FileExistsError("Path exists, but is not a directory:"
+                                  " {0!s}".format(path))
     else:
         create = True
 
     if create:
-        LOGGER.debug("Creating directory %s", path)
+        LOGGER.debug("Creating directory {0!s}".format(path))
         os.makedirs(path)
 
 
@@ -279,13 +281,14 @@ def pushd(path: str) -> None:
     >>>     print(os.getcwd())
     """
     if not os.path.isdir(path):
-        raise FileNotFoundError("Provided path does not exist: %s" % path)
+        raise FileNotFoundError("Provided path does not exist:"
+                                " {0!s}".format(path))
     cwd = os.getcwd()
     os.chdir(path)
-    LOGGER.debug("pushd %s", path)
+    LOGGER.debug("pushd {0!s}".format(path))
     yield
     os.chdir(cwd)
-    LOGGER.debug("popd %s", path)
+    LOGGER.debug("popd {0!s}".format(path))
 
 
 def xml_read(path: str) -> OrderedDict:
@@ -305,13 +308,14 @@ def xml_read(path: str) -> OrderedDict:
                                       malformed XML.
     """
     if not os.path.exists(path):
-        raise FileNotFoundError("Provided path does not exist: %s" % path)
+        raise FileNotFoundError("Provided path does not exist:"
+                                " {0!s}".format(path))
     if not os.path.isfile(path):
-        raise FileNotFoundError("Provided path exists, but is not a file: %s"
-                                % path)
+        raise FileNotFoundError("Provided path exists, but is not a file:"
+                                " {0!s}".format(path))
 
     f_data = file_read(path)
-    LOGGER.debug("Parsing XML from: %s", path)
+    LOGGER.debug("Parsing XML from: {0!s}".format(path))
     return xmltodict.parse(f_data)
 
 
@@ -352,13 +356,14 @@ def yaml_read(path: str) -> dict:
                            to a file.
     """
     if not os.path.exists(path):
-        raise FileNotFoundError("Provided path does not exist: %s" % path)
+        raise FileNotFoundError("Provided path does not exist:"
+                                " {0!s}".format(path))
     if not os.path.isfile(path):
-        raise FileNotFoundError("Provided path exists, but is not a file: %s"
-                                % path)
+        raise FileNotFoundError("Provided path exists, but is not a file:"
+                                " {0!s}".format(path))
 
     f_data = file_read(path)
-    LOGGER.debug("Parsing XML from: %s", path)
+    LOGGER.debug("Parsing XML from: {0!s}".format(path))
     return yaml.load(f_data)
 
 

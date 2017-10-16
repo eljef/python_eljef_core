@@ -21,6 +21,7 @@ This module holds functionality for basic network operations
 
 import ipaddress
 import logging
+import platform
 import subprocess
 
 LOGGER = logging.getLogger(__name__)
@@ -36,15 +37,16 @@ def address_is_ip(address: str) -> int:
         0 if address could not be verified, 4 if the address is IPv4, or 6 if
         the address is IPv6
     """
-    LOGGER.debug("Validating IP address: %s", address)
+    LOGGER.debug("Validating IP address: {0!s}".format(address))
     try:
         ret = ipaddress.ip_address(address)
     except ValueError:
-        LOGGER.warning("Provided address is not a valid IP address: %s",
-                       address)
+        LOGGER.warning("Provided address is not a valid IP address:"
+                       " {0!s}".format(address))
         return 0
 
-    LOGGER.debug("Validated Address %s as IPv%s", address, ret.version)
+    LOGGER.debug("Validated Address {0!s} as IPv{1!s}".format(address,
+                                                              ret.version))
     return ret.version
 
 
@@ -60,8 +62,9 @@ def host_is_up(address: str) -> bool:
     Returns:
         True if host responded to ping, False otherwise.
     """
-    args = ['ping', '-c', '1', address]
-    LOGGER.debug("Pinging host with: %s", ' '.join(args))
+    p_arg = "-n" if platform.system().lower() == "windows" else "-c"
+    args = ['ping', p_arg, '1', address]
+    LOGGER.debug("Pinging host with: {0!s}".format(' '.join(args)))
     output = subprocess.run(args, stdout=subprocess.DEVNULL,
                             stderr=subprocess.DEVNULL)
     return True if output.returncode == 0 else False

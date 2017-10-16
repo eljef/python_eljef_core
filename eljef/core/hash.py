@@ -44,9 +44,10 @@ def encode_base64(path: str) -> str:
         Base64 encoded data as a string
     """
     if not os.path.exists(path):
-        raise FileNotFoundError("Specified file does not exist: %s" % path)
+        raise FileNotFoundError("Specified file does not exist:"
+                                " {0!s}".format(path))
     if not os.path.isfile(path):
-        raise IOError("Specified path is not a file: %s" % path)
+        raise IOError("Specified path is not a file: {0!s}".format(path))
     with open(path, 'rb') as file_data:
         return fops.makestr(base64.b64encode(file_data.read()))
 
@@ -65,11 +66,12 @@ def hash_md5(path: str) -> str:
         IOError: When specified path is not a file
     """
     if not os.path.exists(path):
-        raise FileNotFoundError("Specified file does not exist: %s" % path)
+        raise FileNotFoundError("Specified file does not exist:"
+                                " {0!s}".format(path))
     if not os.path.isfile(path):
-        raise IOError("Specified path is not a file: %s" % path)
+        raise IOError("Specified path is not a file: {0!s}".format(path))
 
-    LOGGER.debug("Generating MD5 hash for %s", path)
+    LOGGER.debug("Generating MD5 hash for {0!s}".format(path))
     h_md5 = hashlib.md5()
     with open(path, 'rb') as hash_file:
         buf = hash_file.read(BLOCK_SIZE)
@@ -94,11 +96,12 @@ def hash_sha256(path: str) -> str:
         IOError: When specified path is not a file
     """
     if not os.path.exists(path):
-        raise FileNotFoundError("Specified file does not exist: %s" % path)
+        raise FileNotFoundError("Specified file does not exist:"
+                                " {0!s}".format(path))
     if not os.path.isfile(path):
-        raise IOError("Specified path is not a file: %s" % path)
+        raise IOError("Specified path is not a file: {0!s}".format(path))
 
-    LOGGER.debug("Generating SHA256 hash for %s", path)
+    LOGGER.debug("Generating SHA256 hash for {0!s}".format(path))
     h_sha256 = hashlib.sha256()
     with open(path, 'rb') as hash_file:
         buf = hash_file.read(BLOCK_SIZE)
