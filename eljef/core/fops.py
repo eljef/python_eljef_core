@@ -195,7 +195,7 @@ def file_extract(path: str, file_name: str) -> Union[str, None]:
     return f_data
 
 
-def file_read(path: str) -> str:
+def file_read(path: str, strip: bool=False) -> str:
     """Read file and return contents
 
     Reads a file into memory and returns it as a string.
@@ -204,13 +204,15 @@ def file_read(path: str) -> str:
 
     Args:
         path: Full path to the file to read.
+        strip: If True, the returned string will have the .strip() function
+               called on it.
 
     Returns:
         Data from file stored as a string
     """
     LOGGER.debug("Read file: {0!s}".format(path))
     with open(path, errors='replace') as file_data:
-        return file_data.read()
+        return file_data.read().strip() if strip else file_data.read()
 
 
 def file_write(path: str, data: AnyStr, backup: bool=False) -> None:
