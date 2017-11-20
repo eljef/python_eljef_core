@@ -22,6 +22,7 @@ This module holds functionality for handling of a programs stored settings.
 import os
 
 from typing import Any
+from typing import Union
 
 from eljef.core import fops
 
@@ -29,9 +30,8 @@ from eljef.core import fops
 class Settings(object):
     """Builds a settings object from defaults and a provided settings file.
 
-    All settings are addressed as obj.setting, each setting being loaded
-    from the defaults provided. Settings are loaded in hierarchy of defaults,
-    then system-wide, then user-level.
+    Settings are loaded in hierarchy of defaults, then system-wide,
+    then user-level.
 
     If the 'conf_back' setting is set to True in the top level of a config
     file, config files will be backed up before writing a new config file.
@@ -52,6 +52,7 @@ class Settings(object):
         self._loaded = {'system': False, 'user': False}
         self._paths = {'system': sys_path, 'user': user_path}
         self._settings = {'system': {}, 'user': {}}
+        self._sets = lambda: None
 
         if 'conf_back' not in self._defaults:
             self._defaults['conf_back'] = False
@@ -64,11 +65,11 @@ class Settings(object):
 
     def _apply_setting(self, setting: str) -> None:
         if setting in self._settings['user']:
-            setattr(self, setting, self._settings['user'][setting])
+            setattr(self._sets, setting, self._settings['user'][setting])
         elif setting in self._settings['system']:
-            setattr(self, setting, self._settings['system'][setting])
+            setattr(self._sets, setting, self._settings['system'][setting])
         else:
-            setattr(self, setting, self._defaults[setting])
+            setattr(self._sets, setting, self._defaults[setting])
 
     def _apply_settings(self) -> None:
         for setting in self._defaults:
@@ -80,8 +81,7 @@ class Settings(object):
             self._settings[settings_type].update(s_data)
             self._loaded[settings_type] = True
 
-    def add_set(self, setting: str, value: Any,
-                sys_setting: bool=False) -> None:
+    def add(self, setting: str, value: Any, sys_setting: bool=False) -> None:
         """Adds a setting
 
         Args:
@@ -94,14 +94,31 @@ class Settings(object):
         self._settings[s_type][setting] = value
         self._apply_setting(setting)
 
-    def save(self, sys_setting: bool=False) -> None:
+    def get(self, setting: str) -> Union[Any, None]:
+        """Retrieve a settings value
+
+        Args:
+            setting: Setting name that value is needed for.
+
+        Returns:
+            Value of setting or None if it doesn't exist.
+        """
+        return getattr(self._sets, setting, None)
+
+    def save(self, sys_setting: bool=False, save_all: bool=False) -> None:
         """Save settings to the configuration file.
 
         Args:
             sys_setting: If True, a system wide configuration file will be
                          saved rather than a user specific configuration.
+            save_all: If sys_setting is False, save all settings to the user
+                      file. (Useful when creating a new settings file.)
         """
         s_type = 'system' if sys_setting else 'user'
         do_backup = True if self._settings[s_type].get('conf_back') else False
-        fops.yaml_write(self._paths[s_type], self._settings[s_type],
-                        backup=do_backup)
+        sets = self._settings[s_type]
+        if s_type == 'user' and save_all:
+            sets = self._defaults
+            sets.update(self._settings['system'])
+            sets.update(self._settings['user'])
+        fops.yaml_write(self._paths[s_type], sets, backup=do_backup)
