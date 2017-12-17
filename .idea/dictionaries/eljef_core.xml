@@ -32,14 +32,17 @@
       <w>paperopt</w>
       <w>pathto</w>
       <w>pdflatex</w>
+      <w>pkgutil</w>
       <w>platex</w>
       <w>popd</w>
       <w>projinfo</w>
       <w>pseudoxml</w>
       <w>pushd</w>
+      <w>pycache</w>
       <w>pygments</w>
       <w>pylint</w>
       <w>pythonic</w>
+      <w>pyyaml</w>
       <w>searchbox</w>
       <w>singlehtml</w>
       <w>sphinxbuild</w>
