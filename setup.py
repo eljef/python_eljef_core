@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 """Setup script"""
 
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 T_VARS = {}
 with open('.PROJINFO') as vars_file:
@@ -12,7 +12,7 @@ with open('.PROJINFO') as vars_file:
 setup(
     name=T_VARS['NAME'],
     version=T_VARS['VERSION'],
-    packages=['eljef', 'eljef.core'],
+    packages=find_packages(),
     url='https://github.com/eljef/python_eljef_core',
     license='LGPLv2.1',
     author='Jef Oliver',
