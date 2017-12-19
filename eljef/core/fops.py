@@ -21,6 +21,7 @@ and filesystems (permissions for directories and files).
 """
 
 import errno
+import json
 import logging
 import os
 import shutil
@@ -36,6 +37,24 @@ from typing import List
 import xmltodict
 
 LOGGER = logging.getLogger(__name__)
+
+__CONV_DATA_TO_STR = {
+    'json': json.dumps,
+    'xml': xmltodict.unparse,
+    'yaml': yaml.dump
+}
+
+__CONV_DATA_TO_STR_ARGS = {
+    'json': {'indent': 4},
+    'xml': {'pretty': True, 'full_document': True, 'indent': '    '},
+    'yaml': {'default_flow_style': False}
+}
+
+__CONV_STR_TO_DATA = {
+    'json': json.loads,
+    'xml': xmltodict.parse,
+    'yaml': yaml.load
+}
 
 
 def makestr(data: AnyStr) -> str:
@@ -215,13 +234,56 @@ def file_read(path: str, strip: bool=False) -> str:
         return file_data.read().strip() if strip else file_data.read()
 
 
-def file_write(path: str, data: AnyStr, backup: bool=False) -> None:
+def file_read_convert(path: str, data_type: str,
+                      default: bool=False) -> Union[dict, OrderedDict]:
+    """Reads and parses a file into a python dictionary using the specified
+       ``data_type`` module.
+
+    Args:
+        path: Path to file to read.
+        data_type: Type of data contained.
+                   Supported: JSON, XML, YAML
+        default: If true and the file is missing, an empty dictionary will be
+                 returned.
+
+    Returns:
+        A dictionary of parsed data.
+
+    Raises:
+        FileNotFoundError: If provided path does not exist and
+                           ``default`` is not True.
+        FileNotFoundError: If provided path exists but is not a file or a link
+                           to a file.
+        ValueError: Unsupported ``data_type``
+    """
+    if data_type.lower() not in __CONV_STR_TO_DATA:
+        raise ValueError("Unsupported data_type: {0!s}".format(data_type))
+
+    if not os.path.exists(path):
+        if default:
+            return dict()
+        else:
+            raise FileNotFoundError("Provided path does not exist:"
+                                    " {0!s}".format(path))
+    if not os.path.isfile(path):
+        raise FileNotFoundError("Provided path exists, but is not a file:"
+                                " {0!s}".format(path))
+
+    f_data = file_read(path)
+    LOGGER.debug("Parsing {0!s} from: {1!s}".format(data_type.upper, path))
+    return __CONV_STR_TO_DATA[data_type.lower()](f_data)
+
+
+def file_write(path: str, data: AnyStr, backup: bool=False,
+               newline: str=None) -> None:
     """Write ``data`` to a file
 
     Args:
         path: Full path to the file to write `data` to.
         data: Data to write to `path`
         backup: Backup the file before writing to it. (Default is False.)
+        newline: Passed to the open function for newline translation. The
+                 default of None lets native translation happen.
     """
     mode = 'a' if not os.path.isfile(path) else 'w'
 
@@ -229,9 +291,68 @@ def file_write(path: str, data: AnyStr, backup: bool=False) -> None:
         backup_path(path)
 
     LOGGER.debug("Write to file: {0!s}".format(path))
-    with open(path, mode) as open_file:
+    with open(path, mode, newline=newline) as open_file:
         total_chars = open_file.write(makestr(data))
         LOGGER.debug("Wrote {0!s} characters".format(total_chars))
+
+
+def file_write_convert_defaults(data_type: str) -> dict:
+    """Returns a dictionary of defaults to be used with file_write_convert
+
+    Args:
+        data_type: Type of data contained.
+                   Supported: JSON, XML, YAML
+
+    Returns:
+        A dictionary of keyword arguments to be passed to file_write_convert
+
+    Raises:
+        ValueError: Unsupported ``data_type``
+
+    Note:
+        The returned dictionary contains defaults that eljef.core.fops uses
+        for writing different files. These defaults can be changed. Extra
+        options can be appended to the dictionary as well. You'll need to read
+        each dumpers documentation for argument information.
+
+        Dumper Defaults:
+            JSON -> json.dumps:
+                indent: 4
+            XML -> xmltodict.unparse:
+                pretty: True
+                full_document: True,
+                indent: '    '
+            YAML -> yaml.dump (PyYAML):
+                default_flow_style: False
+    """
+    if data_type.lower() not in __CONV_DATA_TO_STR_ARGS:
+        raise ValueError("Unsupported data_type: {0!s}".format(data_type))
+    return __CONV_DATA_TO_STR_ARGS[data_type.lower()]
+
+
+def file_write_convert(path: str, data_type: str,
+                       data: Union[dict, OrderedDict],
+                       backup: bool=False, dumper_args: dict=None) -> None:
+    """Writes a Python dictionary to file using the specified ``data_type``
+       module for conversion.
+
+    Args:
+        path: Full path to the file to write `data` to.
+        data_type: Type of data contained.
+                   Supported: JSON, XML, YAML
+        data: Data to write to `path`
+        backup: Backup the file before writing to it. (Default is False.)
+        dumper_args: A dictionary of keyword arguments to pass to the
+                     specified dumper. See ``file_write_convert_defaults``
+    """
+    dumper_kwargs = file_write_convert_defaults(data_type)
+    if dumper_args:
+        dumper_kwargs.update(dumper_args)
+
+    LOGGER.debug('Converting data to string to write to file.')
+    dumper = __CONV_DATA_TO_STR[data_type.lower()]
+    write_string = dumper(data, **dumper_kwargs).replace('\r\n', '\n') + '\n'
+    file_write(path, write_string, backup=backup, newline='\n')
 
 
 def mkdir(path: str, del_exist: bool=False, backup: bool=False) -> None:
@@ -291,93 +412,3 @@ def pushd(path: str) -> None:
     yield
     os.chdir(cwd)
     LOGGER.debug("popd {0!s}".format(path))
-
-
-def xml_read(path: str) -> OrderedDict:
-    """Reads and parses an XML file into a python dictionary.
-
-    Args:
-        path: path to XML file to read.
-
-    Returns:
-        Dictionary of parsed XML information as parsed by xmltodict
-
-    Raises:
-        FileNotFoundError: If provided path does not exist
-        FileNotFoundError: If provided path exists but is not a file or a link
-                           to a file.
-        xml.parsers.expat.ExpatError: If the XML file is not valid XML or
-                                      malformed XML.
-    """
-    if not os.path.exists(path):
-        raise FileNotFoundError("Provided path does not exist:"
-                                " {0!s}".format(path))
-    if not os.path.isfile(path):
-        raise FileNotFoundError("Provided path exists, but is not a file:"
-                                " {0!s}".format(path))
-
-    f_data = file_read(path)
-    LOGGER.debug("Parsing XML from: {0!s}".format(path))
-    return xmltodict.parse(f_data)
-
-
-def xml_write(path: str, data_dict: OrderedDict, pretty: bool=True,
-              full_document: bool=True, indent: str='    ',
-              backup: bool=False) -> None:
-    """Writes an OrderedDict to a file as XML data.
-
-    Args:
-        path: Path to file to write.
-        data_dict: Dictionary of data to convert to XML
-        pretty: If True, write the XML in pretty format with correct
-                white-spacing. (Default is True)
-        full_document: If True, write a full XML document, including headers.
-                       (Default is True)
-        indent: String to use for indenting. (Default is four spaces.)
-        backup: Backup the file before writing. (Default is False.)
-    """
-    LOGGER.debug('Converting data to string to write to file.')
-    xml_string = xmltodict.unparse(data_dict, pretty=pretty,
-                                   full_document=full_document, indent=indent)
-    xml_string += os.linesep
-    file_write(path, xml_string, backup=backup)
-
-
-def yaml_read(path: str) -> dict:
-    """Reads and parses a YAML file into a python dictionary.
-
-    Args:
-        path: Path to file to read.
-
-    Returns:
-        A dictionary of parsed data.
-
-    Raises:
-        FileNotFoundError: If provided path does not exist
-        FileNotFoundError: If provided path exists but is not a file or a link
-                           to a file.
-    """
-    if not os.path.exists(path):
-        raise FileNotFoundError("Provided path does not exist:"
-                                " {0!s}".format(path))
-    if not os.path.isfile(path):
-        raise FileNotFoundError("Provided path exists, but is not a file:"
-                                " {0!s}".format(path))
-
-    f_data = file_read(path)
-    LOGGER.debug("Parsing XML from: {0!s}".format(path))
-    return yaml.load(f_data)
-
-
-def yaml_write(path: str, data_dict: dict, backup: bool=False) -> None:
-    """Writes a dict to a file as YAML data.
-
-    Args:
-        path: Path to file to write.
-        data_dict: Dictionary of data to convert to YAML.
-        backup: Backup the file before writing. (Default is False.)
-    """
-    LOGGER.debug('Converting data to string to write to file.')
-    yaml_string = yaml.dump(data_dict, default_flow_style=False)
-    yaml_string += os.linesep
-    file_write(path, yaml_string, backup=backup)
