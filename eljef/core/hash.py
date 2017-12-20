@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2016, Jef Oliver
+# Copyright (c) 2016-2017, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -25,8 +25,12 @@ import logging
 import os
 
 from eljef.core import fops
+from eljef.core.check import version_check
 
 LOGGER = logging.getLogger(__name__)
+
+version_check(3, 6)
+
 BLOCK_SIZE = 65536
 
 

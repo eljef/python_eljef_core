@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2016, Jef Oliver
+# Copyright (c) 2016-2017, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -26,6 +26,7 @@ import logging
 import os
 import shutil
 import tarfile
+import xmltodict
 import yaml
 
 from collections import OrderedDict
@@ -34,9 +35,11 @@ from typing import AnyStr
 from typing import Union
 from typing import List
 
-import xmltodict
+from eljef.core.check import version_check
 
 LOGGER = logging.getLogger(__name__)
+
+version_check(3, 6)
 
 __CONV_DATA_TO_STR = {
     'json': json.dumps,

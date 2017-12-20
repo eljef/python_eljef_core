@@ -5,6 +5,7 @@ ElJef Core
    :maxdepth: 2
    :hidden:
 
+   eljef.core.check
    eljef.core.fops
    eljef.core.hash
    eljef.core.network
@@ -17,7 +18,8 @@ utilities written by Jef Oliver.
 Dependencies
 ElJef Core depends on the following software packages:
 
-* Python 3.5 or newer
+* Python 3.6 or newer
+* pyyaml
 * xmltodict
 
 Core Function Index
