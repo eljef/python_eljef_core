@@ -6,6 +6,7 @@ ElJef Core
    :hidden:
 
    eljef.core.check
+   eljef.core.dictobj
    eljef.core.fops
    eljef.core.hash
    eljef.core.network
