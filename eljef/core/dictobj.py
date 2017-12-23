@@ -54,15 +54,16 @@ class DictObj(abc.Mapping):
             'value'
 
     """
-    def __init__(self, dictionary: dict) -> None:
-        if not isinstance(dictionary, dict):
-            raise TypeError('Supplied dictionary is not type dict')
-        for key, value in dictionary.items():
-            if not hasattr(self, key):
-                if isinstance(value, dict):
-                    self.__dict__[key] = DictObj(value)
-                else:
-                    self.__dict__[key] = value
+    def __init__(self, dictionary: dict=None) -> None:
+        if dictionary:
+            if not isinstance(dictionary, dict):
+                raise TypeError('Supplied dictionary is not type dict')
+            for key, value in dictionary.items():
+                if not hasattr(self, key):
+                    if isinstance(value, dict):
+                        self.__dict__[key] = DictObj(value)
+                    else:
+                        self.__dict__[key] = value
 
     def __contains__(self, item: Any) -> bool:
         return self.__dict__.__contains__(item)
