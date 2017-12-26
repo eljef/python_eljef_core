@@ -5,6 +5,7 @@ ElJef Core
    :maxdepth: 2
    :hidden:
 
+   eljef.core.applog
    eljef.core.check
    eljef.core.dictobj
    eljef.core.fops

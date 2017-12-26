@@ -24,6 +24,6 @@ setup(
     author='Jef Oliver',
     author_email='jef@eljef.me',
     description='Core Functions for various utilities written by Jef Oliver',
-    install_requires=['pyyaml', 'xmltodict'],
+    install_requires=['colorlog', 'pyyaml', 'xmltodict'],
     python_requires='>=3.6'
 )

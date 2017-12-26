@@ -3,10 +3,13 @@
     <words>
       <w>allsphinxopts</w>
       <w>applehelp</w>
+      <w>applog</w>
       <w>archiveformat</w>
+      <w>asctime</w>
       <w>attrs</w>
       <w>autodoc</w>
       <w>builddir</w>
+      <w>colorlog</w>
       <w>coredoc</w>
       <w>daemonized</w>
       <w>dictobj</w>
