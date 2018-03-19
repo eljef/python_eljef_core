@@ -54,7 +54,7 @@ class DictObj(abc.Mapping):
             'value'
 
     """
-    def __init__(self, dictionary: dict=None) -> None:
+    def __init__(self, dictionary: dict = None) -> None:
         if dictionary:
             if not isinstance(dictionary, dict):
                 raise TypeError('Supplied dictionary is not type dict')

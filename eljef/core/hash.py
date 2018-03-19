@@ -18,7 +18,6 @@
 
 This module holds functions for encoding and hashing data.
 """
-
 import base64
 import hashlib
 import logging
@@ -75,11 +74,11 @@ def hash_md5(path: str) -> str:
     if not os.path.isfile(path):
         raise IOError("Specified path is not a file: {0!s}".format(path))
 
-    LOGGER.debug("Generating MD5 hash for {0!s}".format(path))
+    LOGGER.debug("Generating MD5 hash for %s", path)
     h_md5 = hashlib.md5()
     with open(path, 'rb') as hash_file:
         buf = hash_file.read(BLOCK_SIZE)
-        while len(buf) > 0:
+        while buf:
             h_md5.update(buf)
             buf = hash_file.read(BLOCK_SIZE)
 
@@ -105,11 +104,11 @@ def hash_sha256(path: str) -> str:
     if not os.path.isfile(path):
         raise IOError("Specified path is not a file: {0!s}".format(path))
 
-    LOGGER.debug("Generating SHA256 hash for {0!s}".format(path))
+    LOGGER.debug("Generating SHA256 hash for %s", path)
     h_sha256 = hashlib.sha256()
     with open(path, 'rb') as hash_file:
         buf = hash_file.read(BLOCK_SIZE)
-        while len(buf) > 0:
+        while buf:
             h_sha256.update(buf)
             buf = hash_file.read(BLOCK_SIZE)
 

@@ -19,6 +19,11 @@
 This module holds functions for performing operations on directories, files,
 and filesystems (permissions for directories and files).
 """
+from collections import OrderedDict
+from contextlib import contextmanager
+from typing import AnyStr
+from typing import Union
+from typing import List
 
 import errno
 import json
@@ -28,12 +33,6 @@ import shutil
 import tarfile
 import xmltodict
 import yaml
-
-from collections import OrderedDict
-from contextlib import contextmanager
-from typing import AnyStr
-from typing import Union
-from typing import List
 
 from eljef.core.check import version_check
 
@@ -96,11 +95,11 @@ def backup_path(path: str) -> None:
             while os.path.exists(new_path):
                 num_backups += 1
                 new_path = "{0!s}.{1!s}".format(base_back, num_backups)
-        LOGGER.debug("Backing up file: {0!s} -> {1!s}".format(path, new_path))
+        LOGGER.debug("Backing up file: %s -> %s", path, new_path)
         os.rename(path, new_path)
 
 
-def delete(path: str, follow: bool=False, backup: bool=False) -> None:
+def delete(path: str, follow: bool = False, backup: bool = False) -> None:
     """Delete a directory, file, or link
 
     Deletes a directory, file, or link, ignoring errors if the target does
@@ -121,19 +120,19 @@ def delete(path: str, follow: bool=False, backup: bool=False) -> None:
             parent = None
             if follow:
                 parent = os.path.realpath(path)
-            LOGGER.debug("Deleting link {0!s}".format(path))
+            LOGGER.debug("Deleting link %s", path)
             os.unlink(path)
             if parent and not backup:
-                LOGGER.debug("Deleting link target {0!s}".format(parent))
+                LOGGER.debug("Deleting link target %s", parent)
                 delete(parent)
         else:
             if backup:
                 backup_path(path)
             if os.path.isdir(path):
-                LOGGER.debug("Deleting directory {0!s}".format(path))
+                LOGGER.debug("Deleting directory %s", path)
                 shutil.rmtree(path)
             else:
-                LOGGER.debug("Deleting file {0!s}".format(path))
+                LOGGER.debug("Deleting file %s", path)
                 os.remove(path)
     except (IOError, OSError) as err:
         if err.errno != errno.ENOENT:
@@ -157,12 +156,12 @@ def extract(file: str, path: str) -> None:
     if not os.path.isdir(path):
         raise FileNotFoundError("Specified path is not a directory:"
                                 " {0!s}".format(path))
-    LOGGER.debug("Extracting contents of {0!s} to {1!s}".format(file, path))
+    LOGGER.debug("Extracting contents of %s to %s", file, path)
     with tarfile.open(file) as file_data:
         file_data.extractall(path=path)
 
 
-def extract_file_list(path: str, ignore_dots: bool=False) -> List[str]:
+def extract_file_list(path: str, ignore_dots: bool = False) -> List[str]:
     """Extracts a file list from the provided archive
 
     Args:
@@ -180,8 +179,7 @@ def extract_file_list(path: str, ignore_dots: bool=False) -> List[str]:
         raise tarfile.TarError("File is not a compressed tar archive:"
                                " {0!s}".format(path))
 
-    LOGGER.debug("Extracting file list from archive:"
-                 " {0!s}".format(path))
+    LOGGER.debug("Extracting file list from archive: %s", path)
     with tarfile.open(path) as tar_data:
         file_list = tar_data.getnames()
 
@@ -205,8 +203,7 @@ def file_extract(path: str, file_name: str) -> Union[str, None]:
     Returns:
         Data from ``file_name`` stored as a string or None if not found
     """
-    LOGGER.debug("Extracting file '{0!s}' from archive"
-                 " '{1!s}'".format(path, file_name))
+    LOGGER.debug("Extracting file '%s' from archive '%s'", path, file_name)
     with tarfile.open(path) as tar_data:
         try:
             extracted = tar_data.extractfile(file_name)
@@ -217,7 +214,7 @@ def file_extract(path: str, file_name: str) -> Union[str, None]:
     return f_data
 
 
-def file_read(path: str, strip: bool=False) -> str:
+def file_read(path: str, strip: bool = False) -> str:
     """Read file and return contents
 
     Reads a file into memory and returns it as a string.
@@ -232,13 +229,13 @@ def file_read(path: str, strip: bool=False) -> str:
     Returns:
         Data from file stored as a string
     """
-    LOGGER.debug("Read file: {0!s}".format(path))
+    LOGGER.debug("Read file: %s", path)
     with open(path, errors='replace') as file_data:
         return file_data.read().strip() if strip else file_data.read()
 
 
 def file_read_convert(path: str, data_type: str,
-                      default: bool=False) -> Union[dict, OrderedDict]:
+                      default: bool = False) -> Union[dict, OrderedDict]:
     """Reads and parses a file into a python dictionary using the specified
        ``data_type`` module.
 
@@ -273,12 +270,12 @@ def file_read_convert(path: str, data_type: str,
                                 " {0!s}".format(path))
 
     f_data = file_read(path)
-    LOGGER.debug("Parsing {0!s} from: {1!s}".format(data_type.upper, path))
+    LOGGER.debug("Parsing %s from: %s", data_type.upper, path)
     return __CONV_STR_TO_DATA[data_type.lower()](f_data)
 
 
-def file_write(path: str, data: AnyStr, backup: bool=False,
-               newline: str=None) -> None:
+def file_write(path: str, data: AnyStr, backup: bool = False,
+               newline: str = None) -> None:
     """Write ``data`` to a file
 
     Args:
@@ -293,10 +290,10 @@ def file_write(path: str, data: AnyStr, backup: bool=False,
     if backup:
         backup_path(path)
 
-    LOGGER.debug("Write to file: {0!s}".format(path))
+    LOGGER.debug("Write to file: %s", path)
     with open(path, mode, newline=newline) as open_file:
         total_chars = open_file.write(makestr(data))
-        LOGGER.debug("Wrote {0!s} characters".format(total_chars))
+        LOGGER.debug("Wrote %d characters", total_chars)
 
 
 def file_write_convert_defaults(data_type: str) -> dict:
@@ -335,7 +332,7 @@ def file_write_convert_defaults(data_type: str) -> dict:
 
 def file_write_convert(path: str, data_type: str,
                        data: Union[dict, OrderedDict],
-                       backup: bool=False, dumper_args: dict=None) -> None:
+                       backup: bool = False, dumper_args: dict = None) -> None:
     """Writes a Python dictionary to file using the specified ``data_type``
        module for conversion.
 
@@ -358,7 +355,7 @@ def file_write_convert(path: str, data_type: str,
     file_write(path, write_string, backup=backup, newline='\n')
 
 
-def mkdir(path: str, del_exist: bool=False, backup: bool=False) -> None:
+def mkdir(path: str, del_exist: bool = False, backup: bool = False) -> None:
     """Creates a directory
 
     Creates a directory, creating all needed subdirectories needed. If the
@@ -387,7 +384,7 @@ def mkdir(path: str, del_exist: bool=False, backup: bool=False) -> None:
         create = True
 
     if create:
-        LOGGER.debug("Creating directory {0!s}".format(path))
+        LOGGER.debug("Creating directory %s", path)
         os.makedirs(path)
 
 
@@ -411,7 +408,7 @@ def pushd(path: str) -> None:
                                 " {0!s}".format(path))
     cwd = os.getcwd()
     os.chdir(path)
-    LOGGER.debug("pushd {0!s}".format(path))
+    LOGGER.debug("pushd %s", path)
     yield
     os.chdir(cwd)
-    LOGGER.debug("popd {0!s}".format(path))
+    LOGGER.debug("popd %s", path)

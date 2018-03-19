@@ -53,8 +53,8 @@ class Settings(object):
         The defaults dictionary should be a complete dictionary, containing
         all supported settings for the program and their default values.
     """
-    def __init__(self, defaults: dict, user_path: str=None,
-                 sys_path: str=None) -> None:
+    def __init__(self, defaults: dict, user_path: str = None,
+                 sys_path: str = None) -> None:
         self._defaults = defaults
         self._loaded = {'system': False, 'user': False}
         self._paths = {'system': sys_path, 'user': user_path}
@@ -84,11 +84,11 @@ class Settings(object):
 
     def _read_settings(self, path: str, settings_type: str) -> None:
         if os.path.isfile(path):
-            s_data = fops.yaml_read(path)
+            s_data = fops.file_read_convert(path, 'yaml', True)
             self._settings[settings_type].update(s_data)
             self._loaded[settings_type] = True
 
-    def add(self, setting: str, value: Any, sys_setting: bool=False) -> None:
+    def add(self, setting: str, value: Any, sys_setting: bool = False) -> None:
         """Adds a setting
 
         Args:
@@ -112,7 +112,7 @@ class Settings(object):
         """
         return getattr(self._sets, setting, None)
 
-    def save(self, sys_setting: bool=False, save_all: bool=False) -> None:
+    def save(self, sys_setting: bool = False, save_all: bool = False) -> None:
         """Save settings to the configuration file.
 
         Args:
@@ -128,4 +128,5 @@ class Settings(object):
             sets = self._defaults
             sets.update(self._settings['system'])
             sets.update(self._settings['user'])
-        fops.yaml_write(self._paths[s_type], sets, backup=do_backup)
+        fops.file_write_convert(self._paths[s_type], 'yaml', sets,
+                                backup=do_backup)

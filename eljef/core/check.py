@@ -45,5 +45,6 @@ def version_check(major: int, minor: int) -> None:
         unsupported = True
 
     if unsupported:
-        LOGGER.error(unsupported_string.format(major, minor))
-        raise Exception(unsupported_string.format(major, minor))
+        err_str = unsupported_string.format(major, minor)
+        LOGGER.error(err_str)
+        raise Exception(err_str)

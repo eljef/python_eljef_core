@@ -35,8 +35,8 @@ DEFAULT_COLORS = {
 }
 
 
-def setup_app_logging(debug: bool, log_file: str=None,
-                      colors: dict=None) -> None:
+def setup_app_logging(debug: bool, log_file: str = None,
+                      colors: dict = None) -> None:
     """Sets up the root logger. Colorized console logging is enabled by
        default.
 

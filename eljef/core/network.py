@@ -41,16 +41,15 @@ def address_is_ip(address: str) -> int:
         0 if address could not be verified, 4 if the address is IPv4, or 6 if
         the address is IPv6
     """
-    LOGGER.debug("Validating IP address: {0!s}".format(address))
+    LOGGER.debug("Validating IP address: %s", address)
     try:
         ret = ipaddress.ip_address(address)
     except ValueError:
-        LOGGER.warning("Provided address is not a valid IP address:"
-                       " {0!s}".format(address))
+        LOGGER.warning("Provided address is not a valid IP address: %s",
+                       address)
         return 0
 
-    LOGGER.debug("Validated Address {0!s} as IPv{1!s}".format(address,
-                                                              ret.version))
+    LOGGER.debug("Validated Address %s as IPv%d", address, ret.version)
     return ret.version
 
 
@@ -68,7 +67,7 @@ def host_is_up(address: str) -> bool:
     """
     p_arg = "-n" if platform.system().lower() == "windows" else "-c"
     args = ['ping', p_arg, '1', address]
-    LOGGER.debug("Pinging host with: {0!s}".format(' '.join(args)))
+    LOGGER.debug("Pinging host with: %s", ' '.join(args))
     output = subprocess.run(args, stdout=subprocess.DEVNULL,
                             stderr=subprocess.DEVNULL)
     return True if output.returncode == 0 else False
