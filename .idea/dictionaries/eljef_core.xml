@@ -49,6 +49,7 @@
       <w>pylint</w>
       <w>pythonic</w>
       <w>pyyaml</w>
+      <w>readline</w>
       <w>recurses</w>
       <w>searchbox</w>
       <w>singlehtml</w>
@@ -58,6 +59,7 @@
       <w>todos</w>
       <w>xmltodict</w>
       <w>yaml</w>
+      <w>yscroll</w>
     </words>
   </dictionary>
 </component>

@@ -3,16 +3,18 @@
 .idea/*.iml
 .idea/inspectionProfiles/
 
-/build/
 /docs/build/*
 /docs/source/_static/*
 
+/build/
 dist/
 eljef_core.egg-info/
+__pycache__/
+*.py[cod]
 
 !/docs/build/.dontdelete
 !/docs/source/_static/.dontdelete
 !/.PROJINFO
 !/.gitattributes
 !/.gitignore
-!/.idea/dictionaries/jef.xml
+!/.idea/dictionaries/eljef_core.xml
