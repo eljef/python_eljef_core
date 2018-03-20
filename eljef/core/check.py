@@ -24,6 +24,23 @@ import sys
 
 LOGGER = logging.getLogger(__name__)
 
+_STR_UNSUPPORTED = 'Python version {0!s}.{1!s} or higher is required.'
+
+
+class VersionError(Exception):
+    """Custom Exception for Version Checking.
+
+    Args:
+        major: Major version of Python required
+        minor: Minor version of Python required
+    """
+    def __init__(self, major: int, minor: int) -> None:
+        message = _STR_UNSUPPORTED.format(major, minor)
+        super(VersionError, self).__init__(message)
+        self.message = message
+        self.major = major
+        self.minor = minor
+
 
 def version_check(major: int, minor: int) -> None:
     """Checks if the running version of Python is the supported version or
@@ -36,15 +53,7 @@ def version_check(major: int, minor: int) -> None:
     Raises:
         Exception: If the version of Python running is not supported.
     """
-    unsupported = False
-    unsupported_string = 'Python version {0!s}.{1!s} or higher is required.'
-
     if sys.version_info[0] < major:
-        unsupported = True
+        raise VersionError(major, minor)
     if sys.version_info[0] > major and sys.version_info[1] < minor:
-        unsupported = True
-
-    if unsupported:
-        err_str = unsupported_string.format(major, minor)
-        LOGGER.error(err_str)
-        raise Exception(err_str)
+        raise VersionError(major, minor)

@@ -58,6 +58,12 @@ __CONV_STR_TO_DATA = {
     'yaml': yaml.load
 }
 
+_ERR_FILE_NOT_TAR = "File is not a compressed tar archive: {0!s}"
+_ERR_PATH_NOT_DIR = "Specified path is not a directory: {0!s}"
+_ERR_PATH_NOT_EXIST = "Provided path does not exist: {0!s}"
+_ERR_PATH_NOT_FILE = "Provided path exists, but is not a file: {0!s}"
+_ERR_DATA_TYPE = "Unsupported data_type: {0!s}"
+
 
 def makestr(data: AnyStr) -> str:
     """Return a decoded string
@@ -147,15 +153,13 @@ def extract(file: str, path: str) -> None:
         path: Path to directory to extract contents of compressed file to
 
     Raises:
-        FileNotFoundError: If specified path is not a directory
+        IOError: If specified path is not a directory
         tarfile.Tarfile: If specified file is not a compressed tar archive
     """
     if not tarfile.is_tarfile(file):
-        raise tarfile.TarError("File is not a compressed tar archive:"
-                               " {0!s}".format(file))
+        raise tarfile.TarError(_ERR_FILE_NOT_TAR.format(file))
     if not os.path.isdir(path):
-        raise FileNotFoundError("Specified path is not a directory:"
-                                " {0!s}".format(path))
+        raise IOError(_ERR_PATH_NOT_DIR.format(path))
     LOGGER.debug("Extracting contents of %s to %s", file, path)
     with tarfile.open(file) as file_data:
         file_data.extractall(path=path)
@@ -176,8 +180,7 @@ def extract_file_list(path: str, ignore_dots: bool = False) -> List[str]:
         tarfile.Tarfile: If specified file is not a compressed tar archive
     """
     if not tarfile.is_tarfile(path):
-        raise tarfile.TarError("File is not a compressed tar archive:"
-                               " {0!s}".format(path))
+        raise tarfile.TarError(_ERR_FILE_NOT_TAR.format(path))
 
     LOGGER.debug("Extracting file list from archive: %s", path)
     with tarfile.open(path) as tar_data:
@@ -252,22 +255,19 @@ def file_read_convert(path: str, data_type: str,
     Raises:
         FileNotFoundError: If provided path does not exist and
                            ``default`` is not True.
-        FileNotFoundError: If provided path exists but is not a file or a link
-                           to a file.
+        IOError: If provided path exists but is not a file or a link to a file.
         ValueError: Unsupported ``data_type``
     """
     if data_type.lower() not in __CONV_STR_TO_DATA:
-        raise ValueError("Unsupported data_type: {0!s}".format(data_type))
+        raise ValueError(_ERR_DATA_TYPE.format(data_type))
 
     if not os.path.exists(path):
         if default:
             return dict()
         else:
-            raise FileNotFoundError("Provided path does not exist:"
-                                    " {0!s}".format(path))
+            raise FileNotFoundError(_ERR_PATH_NOT_EXIST.format(path))
     if not os.path.isfile(path):
-        raise FileNotFoundError("Provided path exists, but is not a file:"
-                                " {0!s}".format(path))
+        raise IOError(_ERR_PATH_NOT_FILE.format(path))
 
     f_data = file_read(path)
     LOGGER.debug("Parsing %s from: %s", data_type.upper, path)
@@ -326,7 +326,7 @@ def file_write_convert_defaults(data_type: str) -> dict:
                 default_flow_style: False
     """
     if data_type.lower() not in __CONV_DATA_TO_STR_ARGS:
-        raise ValueError("Unsupported data_type: {0!s}".format(data_type))
+        raise ValueError(_ERR_DATA_TYPE.format(data_type))
     return __CONV_DATA_TO_STR_ARGS[data_type.lower()]
 
 
@@ -378,8 +378,7 @@ def mkdir(path: str, del_exist: bool = False, backup: bool = False) -> None:
             delete(path, backup=backup)
             create = True
         elif not os.path.isdir(path):
-            raise FileExistsError("Path exists, but is not a directory:"
-                                  " {0!s}".format(path))
+            raise FileExistsError(_ERR_PATH_NOT_DIR.format(path))
     else:
         create = True
 
@@ -404,8 +403,7 @@ def pushd(path: str) -> None:
     >>>     print(os.getcwd())
     """
     if not os.path.isdir(path):
-        raise FileNotFoundError("Provided path does not exist:"
-                                " {0!s}".format(path))
+        raise FileNotFoundError(_ERR_PATH_NOT_EXIST.format(path))
     cwd = os.getcwd()
     os.chdir(path)
     LOGGER.debug("pushd %s", path)

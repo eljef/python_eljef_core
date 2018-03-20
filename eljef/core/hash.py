@@ -21,7 +21,6 @@ This module holds functions for encoding and hashing data.
 import base64
 import hashlib
 import logging
-import os
 
 from eljef.core import fops
 from eljef.core.check import version_check
@@ -39,18 +38,10 @@ def encode_base64(path: str) -> str:
     Args:
         path: File to base64 encode contents of
 
-    Raises:
-        FileNotFoundError: When file does not exist
-        IOError: When specified path is not a file
-
     Returns:
         Base64 encoded data as a string
     """
-    if not os.path.exists(path):
-        raise FileNotFoundError("Specified file does not exist:"
-                                " {0!s}".format(path))
-    if not os.path.isfile(path):
-        raise IOError("Specified path is not a file: {0!s}".format(path))
+    LOGGER.debug("base64 encoding data from %s", path)
     with open(path, 'rb') as file_data:
         return fops.makestr(base64.b64encode(file_data.read()))
 
@@ -63,17 +54,7 @@ def hash_md5(path: str) -> str:
 
     Returns:
         string form of MD5 hash
-
-    Raises:
-        FileNotFoundError: When file does not exist
-        IOError: When specified path is not a file
     """
-    if not os.path.exists(path):
-        raise FileNotFoundError("Specified file does not exist:"
-                                " {0!s}".format(path))
-    if not os.path.isfile(path):
-        raise IOError("Specified path is not a file: {0!s}".format(path))
-
     LOGGER.debug("Generating MD5 hash for %s", path)
     h_md5 = hashlib.md5()
     with open(path, 'rb') as hash_file:
@@ -98,12 +79,6 @@ def hash_sha256(path: str) -> str:
         FileNotFoundError: When file does not exist
         IOError: When specified path is not a file
     """
-    if not os.path.exists(path):
-        raise FileNotFoundError("Specified file does not exist:"
-                                " {0!s}".format(path))
-    if not os.path.isfile(path):
-        raise IOError("Specified path is not a file: {0!s}".format(path))
-
     LOGGER.debug("Generating SHA256 hash for %s", path)
     h_sha256 = hashlib.sha256()
     with open(path, 'rb') as hash_file:
