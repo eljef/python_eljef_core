@@ -6,14 +6,11 @@
 import sys
 import os
 
+from eljef.core.__version__ import version as ej_version
+
 
 FILE_PATH = os.path.dirname(os.path.abspath(os.path.join(__file__, '../..')))
 sys.path.insert(0, FILE_PATH)
-T_VARS = {}
-with open(os.path.join(FILE_PATH, '.PROJINFO')) as vars_file:
-    for line in vars_file:
-        key, value = line.partition('=')[::2]
-        T_VARS[key.strip()] = value.strip()
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon']
 templates_path = ['_templates']
@@ -26,8 +23,8 @@ project = 'ElJef Core'
 copyright = '2016, Jef Oliver'
 author = 'Jef Oliver'
 
-version = T_VARS['VERSION']
-release = T_VARS['VERSION']
+version = ej_version
+release = ej_version
 
 language = None
 
