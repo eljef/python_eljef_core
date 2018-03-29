@@ -21,8 +21,8 @@ project = 'ElJef Core'
 copyright = '2016, Jef Oliver'
 author = 'Jef Oliver'
 
-version = '0.0.11'
-release = '0.0.11'
+version = '0.0.12'
+release = '0.0.12'
 
 language = None
 

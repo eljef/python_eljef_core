@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2016-2017, Jef Oliver
+# Copyright (c) 2016-2018, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -233,8 +233,7 @@ def file_read(path: str, strip: bool = False) -> str:
         return file_data.read().strip() if strip else file_data.read()
 
 
-def file_read_convert(path: str, data_type: str,
-                      default: bool = False) -> Union[dict, OrderedDict]:
+def file_read_convert(path: str, data_type: str, default: bool = False) -> Union[dict, OrderedDict]:
     """Reads and parses a file into a python dictionary using the specified ``data_type`` module.
 
     Args:
@@ -267,8 +266,7 @@ def file_read_convert(path: str, data_type: str,
     return __CONV_STR_TO_DATA[data_type.lower()](f_data)
 
 
-def file_write(path: str, data: AnyStr, backup: bool = False,
-               newline: str = None) -> None:
+def file_write(path: str, data: AnyStr, backup: bool = False, newline: str = None) -> None:
     """Write ``data`` to a file
 
     Args:
@@ -322,9 +320,7 @@ def file_write_convert_defaults(data_type: str) -> dict:
     return __CONV_DATA_TO_STR_ARGS[data_type.lower()]
 
 
-def file_write_convert(path: str, data_type: str,
-                       data: Union[dict, OrderedDict],
-                       backup: bool = False, dumper_args: dict = None) -> None:
+def file_write_convert(path: str, data_type: str, data: Union[dict, OrderedDict], **kwargs) -> None:
     """Writes a Python dictionary to file using the specified ``data_type`` module for conversion.
 
     Args:
@@ -332,18 +328,21 @@ def file_write_convert(path: str, data_type: str,
         data_type: Type of data contained.
                    Supported: JSON, XML, YAML
         data: Data to write to `path`
+
+    Keyword Args:
         backup: Backup the file before writing to it. (Default is False.)
         dumper_args: A dictionary of keyword arguments to pass to the specified dumper.
                      See ``file_write_convert_defaults``
     """
     dumper_kwargs = file_write_convert_defaults(data_type)
+    dumper_args = kwargs.get('dumper_args', None)
     if dumper_args:
         dumper_kwargs.update(dumper_args)
 
     LOGGER.debug('Converting data to string to write to file.')
     dumper = __CONV_DATA_TO_STR[data_type.lower()]
     write_string = dumper(data, **dumper_kwargs).replace('\r\n', '\n') + '\n'
-    file_write(path, write_string, backup=backup, newline='\n')
+    file_write(path, write_string, backup=kwargs.get('backup', False), newline='\n')
 
 
 def mkdir(path: str, del_exist: bool = False, backup: bool = False) -> None:
