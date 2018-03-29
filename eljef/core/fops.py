@@ -16,8 +16,8 @@
 # fops.py : Directory, File, and Filesystem operations
 """ElJef Directory, File, and Filesystem operations.
 
-This module holds functions for performing operations on directories, files,
-and filesystems (permissions for directories and files).
+This module holds functions for performing operations on directories, files, and filesystems (permissions for
+directories and files).
 """
 from collections import OrderedDict
 from contextlib import contextmanager
@@ -85,8 +85,8 @@ def makestr(data: AnyStr) -> str:
 def backup_path(path: str) -> None:
     """Renames a directory/file/link for backup purposes
 
-    This will append the .bak extension to a file. If path.bak exists, a number
-    is appended until a non-existent file is found.
+    This will append the .bak extension to a file. If path.bak exists, a number is appended until a non-existent file
+    is found.
     ie: file.bak file.bak.1 file.bak.2
 
     Args:
@@ -114,12 +114,10 @@ def delete(path: str, follow: bool = False, backup: bool = False) -> None:
 
     Args:
         path: Directory, file, or link to delete
-        follow: If True, and path is a symlink, the parent for the symlink is
-                deleted as well.
-        backup: If True, backup `path` before deleting. (If `path` is a
-                symlink, the link will still be unlinked, and the parent will
-                be retained instead of being deleted. The parent will need to
-                be backed up or deleted separately.)
+        follow: If True, and path is a symlink, the parent for the symlink is deleted as well.
+        backup: If True, backup `path` before deleting. (If `path` is a symlink, the link will still be unlinked, and
+                the parent will be retained instead of being deleted. The parent will need to be backed up or deleted
+                separately.)
     """
     try:
         if os.path.islink(path):
@@ -170,8 +168,7 @@ def extract_file_list(path: str, ignore_dots: bool = False) -> List[str]:
 
     Args:
         path: Full path to tar archive to extract file list from.
-        ignore_dots: If True, files with a leading dot are ignored. (Hidden
-                     files.)
+        ignore_dots: If True, files with a leading dot are ignored. (Hidden files.)
 
     Returns:
         List of files in archive
@@ -226,8 +223,7 @@ def file_read(path: str, strip: bool = False) -> str:
 
     Args:
         path: Full path to the file to read.
-        strip: If True, the returned string will have the .strip() function
-               called on it.
+        strip: If True, the returned string will have the .strip() function called on it.
 
     Returns:
         Data from file stored as a string
@@ -239,22 +235,19 @@ def file_read(path: str, strip: bool = False) -> str:
 
 def file_read_convert(path: str, data_type: str,
                       default: bool = False) -> Union[dict, OrderedDict]:
-    """Reads and parses a file into a python dictionary using the specified
-       ``data_type`` module.
+    """Reads and parses a file into a python dictionary using the specified ``data_type`` module.
 
     Args:
         path: Path to file to read.
         data_type: Type of data contained.
                    Supported: JSON, XML, YAML
-        default: If true and the file is missing, an empty dictionary will be
-                 returned.
+        default: If true and the file is missing, an empty dictionary will be returned.
 
     Returns:
         A dictionary of parsed data.
 
     Raises:
-        FileNotFoundError: If provided path does not exist and
-                           ``default`` is not True.
+        FileNotFoundError: If provided path does not exist and ``default`` is not True.
         IOError: If provided path exists but is not a file or a link to a file.
         ValueError: Unsupported ``data_type``
     """
@@ -282,8 +275,8 @@ def file_write(path: str, data: AnyStr, backup: bool = False,
         path: Full path to the file to write `data` to.
         data: Data to write to `path`
         backup: Backup the file before writing to it. (Default is False.)
-        newline: Passed to the open function for newline translation. The
-                 default of None lets native translation happen.
+        newline: Passed to the open function for newline translation. The default of None lets native translation
+                 happen.
     """
     mode = 'a' if not os.path.isfile(path) else 'w'
 
@@ -310,10 +303,9 @@ def file_write_convert_defaults(data_type: str) -> dict:
         ValueError: Unsupported ``data_type``
 
     Note:
-        The returned dictionary contains defaults that eljef.core.fops uses
-        for writing different files. These defaults can be changed. Extra
-        options can be appended to the dictionary as well. You'll need to read
-        each dumpers documentation for argument information.
+        The returned dictionary contains defaults that eljef.core.fops uses for writing different files. These defaults
+        can be changed. Extra options can be appended to the dictionary as well. You'll need to read each dumpers
+        documentation for argument information.
 
         Dumper Defaults:
             JSON -> json.dumps:
@@ -333,8 +325,7 @@ def file_write_convert_defaults(data_type: str) -> dict:
 def file_write_convert(path: str, data_type: str,
                        data: Union[dict, OrderedDict],
                        backup: bool = False, dumper_args: dict = None) -> None:
-    """Writes a Python dictionary to file using the specified ``data_type``
-       module for conversion.
+    """Writes a Python dictionary to file using the specified ``data_type`` module for conversion.
 
     Args:
         path: Full path to the file to write `data` to.
@@ -342,8 +333,8 @@ def file_write_convert(path: str, data_type: str,
                    Supported: JSON, XML, YAML
         data: Data to write to `path`
         backup: Backup the file before writing to it. (Default is False.)
-        dumper_args: A dictionary of keyword arguments to pass to the
-                     specified dumper. See ``file_write_convert_defaults``
+        dumper_args: A dictionary of keyword arguments to pass to the specified dumper.
+                     See ``file_write_convert_defaults``
     """
     dumper_kwargs = file_write_convert_defaults(data_type)
     if dumper_args:
@@ -358,16 +349,13 @@ def file_write_convert(path: str, data_type: str,
 def mkdir(path: str, del_exist: bool = False, backup: bool = False) -> None:
     """Creates a directory
 
-    Creates a directory, creating all needed subdirectories needed. If the
-    directory already exists, the error is ignored. If `del_exist` is specified
-    and the directory exists, it is deleted then recreated.
+    Creates a directory, creating all needed subdirectories needed. If the directory already exists, the error is
+    ignored. If `del_exist` is specified and the directory exists, it is deleted then recreated.
 
     Args:
         path: Path to directory to create
-        del_exist: If True, and `path` already exists, delete it, then
-                   recreate it.
-        backup: If True and `del_exist` is True, backup the existing directory
-                before deleting it.
+        del_exist: If True, and `path` already exists, delete it, then recreate it.
+        backup: If True and `del_exist` is True, backup the existing directory before deleting it.
 
     Raises:
         FileExistsError: If ``path`` exists but is not a directory.

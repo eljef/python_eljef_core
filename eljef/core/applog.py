@@ -14,9 +14,9 @@
 # Jef Oliver <jef@eljef.me>
 #
 # applog.py : ElJef Application Logging Setup
-"""ElJef ElJef Application Logging Setup
+"""ElJef Application Logging Setup
 
-ElJef ElJef Application Logging Setup.
+ElJef Application Logging Setup.
 """
 import logging
 import sys
@@ -37,22 +37,19 @@ DEFAULT_COLORS = {
 
 def setup_app_logging(debug: bool, log_file: str = None,
                       colors: dict = None) -> None:
-    """Sets up the root logger. Colorized console logging is enabled by
-       default.
+    """Sets up the root logger. Colorized console logging is enabled by default.
 
     Args:
         debug: Enable DEBUG logging level. Default is INFO.
         log_file: If specified, logging to a file is enabled.
-        colors: Colors (supported by colorlog) to enable for logging messages
-                displayed on the console.
+        colors: Colors (supported by colorlog) to enable for logging messages displayed on the console.
     """
     color_dict = colors if colors else DEFAULT_COLORS
 
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG if debug else logging.INFO)
 
-    c_formatter = ColoredFormatter('%(log_color)s%(message)s',
-                                   log_colors=color_dict)
+    c_formatter = ColoredFormatter('%(log_color)s%(message)s', log_colors=color_dict)
     c_handler = logging.StreamHandler(sys.stdout)
     c_handler.setLevel(logging.DEBUG if debug else logging.INFO)
     c_handler.setFormatter(c_formatter)

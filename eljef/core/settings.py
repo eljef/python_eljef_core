@@ -50,8 +50,8 @@ class Settings(object):
 
     Note:
         The settings file is expected to be stored as YAML.
-        The defaults dictionary should be a complete dictionary, containing
-        all supported settings for the program and their default values.
+        The defaults dictionary should be a complete dictionary, containing all supported settings for the program and
+        their default values.
     """
     def __init__(self, defaults: dict, user_path: str = None,
                  sys_path: str = None) -> None:
@@ -94,8 +94,7 @@ class Settings(object):
         Args:
             setting: Setting name to add
             value: Value to add to setting
-            sys_setting: If True, the adds a system-wide setting rather than
-                         a user specific setting.
+            sys_setting: If True, the adds a system-wide setting rather than a user specific setting.
         """
         s_type = 'system' if sys_setting else 'user'
         self._settings[s_type][setting] = value
@@ -116,10 +115,10 @@ class Settings(object):
         """Save settings to the configuration file.
 
         Args:
-            sys_setting: If True, a system wide configuration file will be
-                         saved rather than a user specific configuration.
-            save_all: If sys_setting is False, save all settings to the user
-                      file. (Useful when creating a new settings file.)
+            sys_setting: If True, a system wide configuration file will be saved rather than a user specific
+                         configuration.
+            save_all: If sys_setting is False, save all settings to the user file.
+                      (Useful when creating a new settings file.)
         """
         s_type = 'system' if sys_setting else 'user'
         do_backup = True if self._settings[s_type].get('conf_back') else False
@@ -128,5 +127,4 @@ class Settings(object):
             sets = self._defaults
             sets.update(self._settings['system'])
             sets.update(self._settings['user'])
-        fops.file_write_convert(self._paths[s_type], 'yaml', sets,
-                                backup=do_backup)
+        fops.file_write_convert(self._paths[s_type], 'yaml', sets, backup=do_backup)

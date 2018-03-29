@@ -3,7 +3,7 @@
 
 import sys
 from setuptools import setup
-from eljef.core.__version__ import version as ej_version
+from eljef.core.__version__ import VERSION as EJC_VERSION
 
 if sys.version_info[0] < 3:
     raise Exception('ElJef tools only support python version 3.6 or higher.')
@@ -20,6 +20,6 @@ setup(
     packages=['eljef.core'],
     python_requires='>=3.6',
     url='https://github.com/eljef/python_eljef_core',
-    version=ej_version,
+    version=EJC_VERSION,
     zip_safe=False,
 )

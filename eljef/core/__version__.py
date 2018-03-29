@@ -1,2 +1,3 @@
 # -*- coding: UTF-8 -*-
-version = '0.0.10'
+"""ElJef Core Version"""
+VERSION = '0.0.11'

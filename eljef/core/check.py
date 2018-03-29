@@ -43,8 +43,7 @@ class VersionError(Exception):
 
 
 def version_check(major: int, minor: int) -> None:
-    """Checks if the running version of Python is the supported version or
-       newer.
+    """Checks if the running version of Python is the supported version or newer.
 
     Args:
         major: Major version of Python needed.

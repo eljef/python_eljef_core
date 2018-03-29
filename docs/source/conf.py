@@ -6,7 +6,7 @@
 import sys
 import os
 
-from eljef.core.__version__ import version as ej_version
+from eljef.core.__version__ import VERSION as EJC_VERSION
 
 
 FILE_PATH = os.path.dirname(os.path.abspath(os.path.join(__file__, '../..')))
@@ -23,8 +23,8 @@ project = 'ElJef Core'
 copyright = '2016, Jef Oliver'
 author = 'Jef Oliver'
 
-version = ej_version
-release = ej_version
+version = EJC_VERSION
+release = EJC_VERSION
 
 language = None
 

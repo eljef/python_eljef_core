@@ -33,10 +33,8 @@ version_check(3, 6)
 class DictObj(abc.Mapping):
     """Builds an immutable object from a dictionary
 
-    Recurses a dictionary, converting it to a dictionary object, while
-    maintaining compatibility with dictionary methods. This can be used as
-    a dictionary, or as an object with the dictionary keys as object
-    attributes.
+    Recurses a dictionary, converting it to a dictionary object, while maintaining compatibility with dictionary
+    methods. This can be used as a dictionary, or as an object with the dictionary keys as object attributes.
 
     Args:
         dictionary: Dictionary to convert to DictObj.
@@ -75,15 +73,13 @@ class DictObj(abc.Mapping):
         try:
             self.__dict__.__delitem__(item)
         except KeyError:
-            raise AttributeError("'{0} object has no attribute '{1}'"
-                                 .format(self.__class__.__name__, item))
+            raise AttributeError("'{0} object has no attribute '{1}'".format(self.__class__.__name__, item))
 
     def __getattr__(self, item: str) -> Any:
         try:
             return self.__dict__[item]
         except KeyError:
-            raise AttributeError("'{0} object has no attribute '{1}'"
-                                 .format(self.__class__.__name__, item))
+            raise AttributeError("'{0} object has no attribute '{1}'".format(self.__class__.__name__, item))
 
     def __delitem__(self, item: Any) -> None:
         self.__dict__.__delitem__(item)
@@ -95,8 +91,7 @@ class DictObj(abc.Mapping):
         return self.__dict__.__len__()
 
     def __repr__(self) -> str:
-        return '{%s}' % str(', '.join('%s : %s' % (key, repr(value)) for
-                                      (key, value) in self.__dict__.items()))
+        return '{%s}' % str(', '.join('%s : %s' % (key, repr(value)) for (key, value) in self.__dict__.items()))
 
     def __setattr__(self, key: Any, value: Any) -> None:
         self.__dict__[key] = value
