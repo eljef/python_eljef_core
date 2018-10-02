@@ -254,10 +254,10 @@ def file_read_convert(path: str, data_type: str, default: bool = False) -> Union
         raise ValueError(_ERR_DATA_TYPE.format(data_type))
 
     if not os.path.exists(path):
-        if default:
-            return dict()
-        else:
+        if not default:
             raise FileNotFoundError(_ERR_PATH_NOT_EXIST.format(path))
+        return dict()
+
     if not os.path.isfile(path):
         raise IOError(_ERR_PATH_NOT_FILE.format(path))
 

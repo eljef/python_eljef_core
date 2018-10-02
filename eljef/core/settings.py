@@ -34,7 +34,7 @@ LOGGER = logging.getLogger(__name__)
 version_check(3, 6)
 
 
-class Settings(object):
+class Settings:
     """Builds a settings object from defaults and a provided settings file.
 
     Settings are loaded in hierarchy of defaults, then system-wide,
