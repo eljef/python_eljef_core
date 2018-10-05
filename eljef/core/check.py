@@ -54,5 +54,5 @@ def version_check(major: int, minor: int) -> None:
     """
     if sys.version_info[0] < major:
         raise VersionError(major, minor)
-    if sys.version_info[0] > major and sys.version_info[1] < minor:
+    if sys.version_info[0] >= major and sys.version_info[1] < minor:
         raise VersionError(major, minor)

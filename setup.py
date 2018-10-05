@@ -19,6 +19,6 @@ setup(
     packages=['eljef.core'],
     python_requires='>=3.6',
     url='https://github.com/eljef/python_eljef_core',
-    version='0.0.14',
+    version='0.0.15',
     zip_safe=False,
 )
