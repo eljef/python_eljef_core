@@ -34,7 +34,9 @@ import tarfile
 import xmltodict
 import yaml
 
+from eljef.core import kv
 from eljef.core.check import version_check
+from eljef.core.strings import makestr
 
 LOGGER = logging.getLogger(__name__)
 
@@ -42,18 +44,21 @@ version_check(3, 6)
 
 __CONV_DATA_TO_STR = {
     'json': json.dumps,
+    'kv': kv.dumps,
     'xml': xmltodict.unparse,
     'yaml': yaml.dump
 }
 
 __CONV_DATA_TO_STR_ARGS = {
     'json': {'indent': 4},
+    'kv': {'spaced': False},
     'xml': {'pretty': True, 'full_document': True, 'indent': '    '},
     'yaml': {'default_flow_style': False}
 }
 
 __CONV_STR_TO_DATA = {
     'json': json.loads,
+    'kv': kv.loads,
     'xml': xmltodict.parse,
     'yaml': yaml.load
 }
@@ -63,23 +68,7 @@ _ERR_PATH_NOT_DIR = "Specified path is not a directory: {0!s}"
 _ERR_PATH_NOT_EXIST = "Provided path does not exist: {0!s}"
 _ERR_PATH_NOT_FILE = "Provided path exists, but is not a file: {0!s}"
 _ERR_DATA_TYPE = "Unsupported data_type: {0!s}"
-
-
-def makestr(data: AnyStr) -> str:
-    """Return a decoded string
-
-    If ``data`` is encoded (bytes), it is decoded before returned.
-
-    Args:
-        data: data to return decoded
-
-    Returns:
-        Decoded string
-    """
-    try:
-        return str(data.decode('utf-8'))
-    except AttributeError:
-        return str(data)
+_ERR_NO_DATA = "No data provided"
 
 
 def backup_path(path: str) -> None:
@@ -239,7 +228,8 @@ def file_read_convert(path: str, data_type: str, default: bool = False) -> Union
     Args:
         path: Path to file to read.
         data_type: Type of data contained.
-                   Supported: JSON, XML, YAML
+                   Supported: JSON, KV, XML, YAML
+                              kv = key=value pairs
         default: If true and the file is missing, an empty dictionary will be returned.
 
     Returns:
@@ -292,7 +282,8 @@ def file_write_convert_defaults(data_type: str) -> dict:
 
     Args:
         data_type: Type of data contained.
-                   Supported: JSON, XML, YAML
+                   Supported: JSON, KV, XML, YAML
+                              KV is key=value pairs
 
     Returns:
         A dictionary of keyword arguments to be passed to file_write_convert
@@ -326,7 +317,8 @@ def file_write_convert(path: str, data_type: str, data: Union[dict, OrderedDict]
     Args:
         path: Full path to the file to write `data` to.
         data_type: Type of data contained.
-                   Supported: JSON, XML, YAML
+                   Supported: JSON, KV, XML, YAML
+                              KV is key=value pairs
         data: Data to write to `path`
 
     Keyword Args:
