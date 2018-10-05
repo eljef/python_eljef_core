@@ -116,7 +116,7 @@ def do_version_set(new_version: str):
     print('Bumping Project Version: ' + current + ' -> ' + new_version)
 
     for version_file in VERSION_INFO['files']:
-        with open(version_file, 'r+') as open_file:
+        with open(version_file, 'r+', newline='\n') as open_file:
             data = open_file.read()
             open_file.seek(0)
             open_file.write(data.replace(current, new_version))
