@@ -1,0 +1,30 @@
+[project]
+name = "eljef_core"
+languages = ["python"]
+license = "lgplv2.1"
+license_org = "Jef Oliver"
+license_year = "2018"
+line_ending = "unix"
+version = "0.0.15"
+version_files = ["eljef/core/__version__.py", "docs/source/conf.py", "setup.py"]
+
+[[dependencies]]
+manager = "pip"
+language = "python"
+installer = "pip"
+
+[[linters]]
+name = "flake8"
+enabled = true
+debug_flag = "-v"
+language = "python"
+lint_paths = ["eljef/core"]
+url = "flake8"
+
+[[linters]]
+name = "pylint"
+enabled = true
+debug_flag = "-v"
+language = "python"
+lint_paths = ["eljef/core"]
+url = "pylint"
