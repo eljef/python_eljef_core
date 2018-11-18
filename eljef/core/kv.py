@@ -22,6 +22,8 @@ ie: data from files
 
 from eljef.core.strings import makestr
 
+_COMMENT_CHECKS = [';', '#', '/']
+
 
 def dumps(data: dict, **kwargs) -> str:
     """Dumps a dictionary to a key/value pair string for writing to a file.
@@ -62,7 +64,9 @@ def loads(data: str) -> dict:
     new_data = makestr(data.replace('\r\n', '\n')).split('\n')
     if new_data:
         for line in new_data:
-            key, value = line.split('=', 1)
-            ret[key.strip()] = value.strip()
+            new_line = line.strip()
+            if new_line and new_line[0] not in _COMMENT_CHECKS and '=' in new_line:
+                key, value = new_line.split('=', 1)
+                ret[key.strip()] = value.strip()
 
     return ret
