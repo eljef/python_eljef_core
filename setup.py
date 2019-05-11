@@ -13,7 +13,7 @@ setup(
     author='Jef Oliver',
     author_email='jef@eljef.me',
     description='Core functions for various utilities written by Jef Oliver',
-    install_requires=['colorlog', 'pyyaml', 'xmltodict'],
+    install_requires=['colorlog', 'pyaml', 'xmltodict'],
     license='LGPLv2.1',
     name='eljef_core',
     packages=['eljef.core'],
