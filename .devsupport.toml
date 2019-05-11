@@ -8,15 +8,19 @@
   version = "0.0.16"
   version_files = ["eljef/core/__version__.py", "docs/source/conf.py", "setup.py"]
 
+[[base_command]]
+  language = "python"
+  install = ["pip", "(_proxy_)--proxy=_proxy_", "install"]
+  install_debug = ["pip", "-v", "(_proxy_)--proxy=_proxy_", "install"]
+  update = ["pip", "(_proxy_)--proxy=_proxy_", "install", "--upgrade"]
+  update_debug = ["pip", "-v", "(_proxy_)--proxy=_proxy_", "install", "--upgrade"]
+
 [[dependencies]]
   name = "pip"
   language = "python"
-  installer = ["pip", "(_proxy_)--proxy _proxy_", "install", "--upgrade", "pip"]
-  installer_debug = ["pip", "-v", "(_proxy_)--proxy _proxy_", "install", "--upgrade", "pip"]
+  install_address = "pip"
   run = ["pip", "(_proxy_)--proxy _proxy_", "install", "-r", "requirements.txt"]
   run_debug = ["pip", "-v", "(_proxy_)--proxy _proxy_", "install", "-r", "requirements.txt"]
-  update = ["pip", "(_proxy_)--proxy _proxy_", "install", "--upgrade", "pip"]
-  update_debug = ["pip", "-v", "(_proxy_)--proxy _proxy_", "install", "--upgrade", "pip"]
   update_deps = ["pip", "(_proxy_)--proxy _proxy_", "install", "--upgrade", "-r", "requirements.txt"]
   update_deps_debug = ["pip", "-v", "(_proxy_)--proxy _proxy_", "install", "--upgrade", "-r", "requirements.txt"]
 
@@ -24,20 +28,14 @@
   name = "flake8"
   enabled = true
   language = "python"
-  installer = ["pip", "(_proxy_)--proxy _proxy_", "install", "flake8"]
-  installer_debug = ["pip", "-v", "(_proxy_)--proxy _proxy_", "install", "flake8"]
+  install_address = "flake8"
   run = ["flake8", "eljef/core"]
   run_debug = ["flake8", "-v", "eljef/core"]
-  update = ["pip", "(_proxy_)--proxy _proxy_", "install", "--upgrade", "flake8"]
-  update_debug = ["pip", "-v", "(_proxy_)--proxy _proxy_", "install", "--upgrade", "flake8"]
 
 [[linters]]
   name = "pylint"
   enabled = true
   language = "python"
-  installer = ["pip", "(_proxy_)--proxy _proxy_", "install", "pylint"]
-  installer_debug = ["pip", "-v", "(_proxy_)--proxy _proxy_", "install", "pylint"]
+  install_address = "pylint"
   run = ["pylint", "eljef/core"]
   run_debug = ["pytlint", "-v", "eljef/core"]
-  update = ["pip", "(_proxy_)--proxy _proxy_", "install", "--upgrade", "pylint"]
-  update_debug = ["pip", "-v", "(_proxy_)--proxy _proxy_", "install", "--upgrade", "pylint"]
