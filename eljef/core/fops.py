@@ -63,6 +63,10 @@ __CONV_STR_TO_DATA = {
     'yaml': yaml.load
 }
 
+__CONV_STR_TO_DATA_ARGS = {
+    'yaml': {'Loader': yaml.FullLoader}
+}
+
 _ERR_FILE_NOT_TAR = "File is not a compressed tar archive: {0!s}"
 _ERR_PATH_NOT_DIR = "Specified path is not a directory: {0!s}"
 _ERR_PATH_NOT_EXIST = "Provided path does not exist: {0!s}"
@@ -240,7 +244,9 @@ def file_read_convert(path: str, data_type: str, default: bool = False) -> Union
         IOError: If provided path exists but is not a file or a link to a file.
         ValueError: Unsupported ``data_type``
     """
-    if data_type.lower() not in __CONV_STR_TO_DATA:
+    data_type_lower = data_type.lower()
+
+    if data_type_lower not in __CONV_STR_TO_DATA:
         raise ValueError(_ERR_DATA_TYPE.format(data_type))
 
     if not os.path.exists(path):
@@ -253,7 +259,11 @@ def file_read_convert(path: str, data_type: str, default: bool = False) -> Union
 
     f_data = file_read(path)
     LOGGER.debug("Parsing %s from: %s", data_type.upper, path)
-    return __CONV_STR_TO_DATA[data_type.lower()](f_data)
+
+    if data_type_lower in __CONV_STR_TO_DATA_ARGS:
+        return __CONV_STR_TO_DATA[data_type_lower](f_data, **__CONV_STR_TO_DATA_ARGS[data_type_lower])
+
+    return __CONV_STR_TO_DATA[data_type_lower](f_data)
 
 
 def file_write(path: str, data: AnyStr, backup: bool = False, newline: str = None) -> None:
