@@ -67,4 +67,4 @@ def host_is_up(address: str) -> bool:
     args = ['ping', p_arg, '1', address]
     LOGGER.debug("Pinging host with: %s", ' '.join(args))
     output = subprocess.run(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    return True if output.returncode == 0 else False
+    return output.returncode == 0

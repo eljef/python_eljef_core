@@ -121,7 +121,7 @@ class Settings:
                       (Useful when creating a new settings file.)
         """
         s_type = 'system' if sys_setting else 'user'
-        do_backup = True if self._settings[s_type].get('conf_back') else False
+        do_backup = bool(self._settings[s_type].get('conf_back'))
         sets = self._settings[s_type]
         if s_type == 'user' and save_all:
             sets = self._defaults
