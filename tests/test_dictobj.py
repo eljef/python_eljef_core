@@ -100,3 +100,7 @@ class TestDictObj(unittest.TestCase):
         d = self._return_dictobj()
         got = d.to_dict()
         self.assertDictEqual(want, got)
+
+
+if __name__ == '__main__':
+    unittest.main()

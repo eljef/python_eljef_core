@@ -30,3 +30,7 @@ logging.disable(logging.ERROR)
 class TestVersion(unittest.TestCase):
     def test_version(self):
         self.assertTrue(__version__.VERSION is not None)
+
+
+if __name__ == '__main__':
+    unittest.main()

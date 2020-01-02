@@ -41,14 +41,5 @@ class TestAddressIsIp(unittest.TestCase):
         self.assertEqual(network.address_is_ip("::ffff:c0a8:101"), 6)
 
 
-class TestHostIsUp(unittest.TestCase):
-    def test_host_is_up_down(self):
-        self.assertFalse(network.host_is_up("0.1.2.3"))  # hopefully this address doesn't exist on the machine
-
-    def test_host_is_up_up(self):
-        # this will need to be changed to something reachable on networks that are proxied or filtered
-        self.assertTrue(network.host_is_up("1.1.1.1"))
-
-
 if __name__ == '__main__':
     unittest.main()

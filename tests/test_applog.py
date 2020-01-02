@@ -41,3 +41,7 @@ class TestSetupAppLogging(unittest.TestCase):
     def test_setup_app_logging(self):
         path = _get_file()
         applog.setup_app_logging(True, path)
+
+
+if __name__ == '__main__':
+    unittest.main()

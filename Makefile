@@ -1,4 +1,4 @@
-VERSION := 1.0.0
+VERSION := 1.0.1
 
 build:
 	python3 setup.py build
@@ -7,7 +7,7 @@ clean:
 	rm -rf build dist eljef_core.egg-info \
 		eljef/__pycache__ eljef/core/__pycache__ \
 		tests/__pycache__ tests/_trial_temp \
-		tests/.pytest_cache .coverage
+		.pytest_cache .coverage
 
 depsinstall:
 	pip install -r requirements.txt

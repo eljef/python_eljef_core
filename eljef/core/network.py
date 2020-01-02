@@ -22,9 +22,6 @@ This module holds functionality for basic network operations
 import ipaddress
 import logging
 
-# pylint: disable=no-name-in-module
-from scapy.all import ICMP, IP, sr1
-
 LOGGER = logging.getLogger(__name__)
 
 
@@ -46,22 +43,3 @@ def address_is_ip(address: str) -> int:
 
     LOGGER.debug("Validated Address %s as IPv%d", address, ret.version)
     return ret.version
-
-
-def host_is_up(address: str) -> bool:
-    """Sends a ping to a host to determine if it is up.
-
-    Note:
-        This must be run with elevated privileges on some operating systems due to ICMP requiring raw sockets,
-        and raw sockets are typically limited.
-        This will only work for hosts that do not block ICMP pings.
-
-    Args:
-        address: Address to ping
-
-    Returns:
-        True if host responded to ping, False otherwise.
-    """
-    resp = sr1(IP(dst=address) / ICMP(), timeout=2)
-
-    return resp is not None
