@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2017-2018, Jef Oliver
+# Copyright (c) 2017-2020, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -18,22 +18,19 @@
 
 This module holds the Dictionary Object class.
 """
+
 import logging
 
 from collections import abc
 from typing import Any
 
-from eljef.core.check import version_check
-
 LOGGER = logging.getLogger(__name__)
-
-version_check(3, 6)
 
 
 class DictObj(abc.Mapping):
-    """Builds an immutable object from a dictionary
+    """Builds an object from a dictionary
 
-    Recurses a dictionary, converting it to a dictionary object, while maintaining compatibility with dictionary
+    Recurses a dictionary, converting it to an object, while maintaining compatibility with dictionary
     methods. This can be used as a dictionary, or as an object with the dictionary keys as object attributes.
 
     Args:
@@ -54,8 +51,6 @@ class DictObj(abc.Mapping):
     """
     def __init__(self, dictionary: dict = None) -> None:
         if dictionary:
-            if not isinstance(dictionary, dict):
-                raise TypeError('Supplied dictionary is not type dict')
             for key, value in dictionary.items():
                 if not hasattr(self, key):
                     if isinstance(value, dict):

@@ -6,12 +6,13 @@ ElJef Core
    :hidden:
 
    eljef.core.applog
-   eljef.core.check
    eljef.core.dictobj
    eljef.core.fops
    eljef.core.hash
+   eljef.core.kv
    eljef.core.network
    eljef.core.settings
+   eljef.core.strings
 
 
 The ElJef Core API provides core functionality that is shared between all

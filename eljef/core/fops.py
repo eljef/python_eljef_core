@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2016-2018, Jef Oliver
+# Copyright (c) 2016-2020, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -19,28 +19,24 @@
 This module holds functions for performing operations on directories, files, and filesystems (permissions for
 directories and files).
 """
+
 from collections import OrderedDict
 from contextlib import contextmanager
 from typing import AnyStr
 from typing import Union
-from typing import List
 
 import errno
 import json
 import logging
 import os
 import shutil
-import tarfile
 import xmltodict
 import yaml
 
 from eljef.core import kv
-from eljef.core.check import version_check
 from eljef.core.strings import makestr
 
 LOGGER = logging.getLogger(__name__)
-
-version_check(3, 6)
 
 __CONV_DATA_TO_STR = {
     'json': json.dumps,
@@ -73,6 +69,15 @@ _ERR_PATH_NOT_EXIST = "Provided path does not exist: {0!s}"
 _ERR_PATH_NOT_FILE = "Provided path exists, but is not a file: {0!s}"
 _ERR_DATA_TYPE = "Unsupported data_type: {0!s}"
 _ERR_NO_DATA = "No data provided"
+
+"""JSON data type"""
+JSON = 'json'
+"""Key/Value data type"""
+KV = 'kv'
+"""XML data type"""
+XML = 'xml'
+"""YAML data type"""
+YAML = 'yaml'
 
 
 def backup_path(path: str) -> None:
@@ -125,6 +130,7 @@ def delete(path: str, follow: bool = False, backup: bool = False) -> None:
         else:
             if backup:
                 backup_path(path)
+                return
             if os.path.isdir(path):
                 LOGGER.debug("Deleting directory %s", path)
                 shutil.rmtree(path)
@@ -134,77 +140,6 @@ def delete(path: str, follow: bool = False, backup: bool = False) -> None:
     except (IOError, OSError) as err:
         if err.errno != errno.ENOENT:
             raise
-
-
-def extract(file: str, path: str) -> None:
-    """Extracts contents of a compressed file to path
-
-    Args:
-        file: File to extract contents of
-        path: Path to directory to extract contents of compressed file to
-
-    Raises:
-        IOError: If specified path is not a directory
-        tarfile.Tarfile: If specified file is not a compressed tar archive
-    """
-    if not tarfile.is_tarfile(file):
-        raise tarfile.TarError(_ERR_FILE_NOT_TAR.format(file))
-    if not os.path.isdir(path):
-        raise IOError(_ERR_PATH_NOT_DIR.format(path))
-    LOGGER.debug("Extracting contents of %s to %s", file, path)
-    with tarfile.open(file) as file_data:
-        file_data.extractall(path=path)
-
-
-def extract_file_list(path: str, ignore_dots: bool = False) -> List[str]:
-    """Extracts a file list from the provided archive
-
-    Args:
-        path: Full path to tar archive to extract file list from.
-        ignore_dots: If True, files with a leading dot are ignored. (Hidden files.)
-
-    Returns:
-        List of files in archive
-
-    Raises:
-        tarfile.Tarfile: If specified file is not a compressed tar archive
-    """
-    if not tarfile.is_tarfile(path):
-        raise tarfile.TarError(_ERR_FILE_NOT_TAR.format(path))
-
-    LOGGER.debug("Extracting file list from archive: %s", path)
-    with tarfile.open(path) as tar_data:
-        file_list = tar_data.getnames()
-
-    if ignore_dots:
-        for name in file_list:
-            if os.path.basename(name).startswith('.'):
-                file_list.remove(name)
-
-    return file_list
-
-
-def file_extract(path: str, file_name: str) -> Union[str, None]:
-    """Extracts file and return contents
-
-    Extracts ``file_name`` from ``file`` and returns it as a string.
-
-    Args:
-        path: Full path to the archive to extract `file_name` from
-        file_name: Name of file to extract from `path`
-
-    Returns:
-        Data from ``file_name`` stored as a string or None if not found
-    """
-    LOGGER.debug("Extracting file '%s' from archive '%s'", path, file_name)
-    with tarfile.open(path) as tar_data:
-        try:
-            extracted = tar_data.extractfile(file_name)
-            f_data = makestr(extracted.read()) if extracted else None
-        except KeyError:
-            f_data = None
-
-    return f_data
 
 
 def file_read(path: str, strip: bool = False) -> str:
@@ -345,35 +280,6 @@ def file_write_convert(path: str, data_type: str, data: Union[dict, OrderedDict]
     dumper = __CONV_DATA_TO_STR[data_type.lower()]
     write_string = dumper(data, **dumper_kwargs).replace('\r\n', '\n') + '\n'
     file_write(path, write_string, backup=kwargs.get('backup', False), newline='\n')
-
-
-def mkdir(path: str, del_exist: bool = False, backup: bool = False) -> None:
-    """Creates a directory
-
-    Creates a directory, creating all needed subdirectories needed. If the directory already exists, the error is
-    ignored. If `del_exist` is specified and the directory exists, it is deleted then recreated.
-
-    Args:
-        path: Path to directory to create
-        del_exist: If True, and `path` already exists, delete it, then recreate it.
-        backup: If True and `del_exist` is True, backup the existing directory before deleting it.
-
-    Raises:
-        FileExistsError: If ``path`` exists but is not a directory.
-    """
-    create = False
-    if os.path.exists(path):
-        if del_exist:
-            delete(path, backup=backup)
-            create = True
-        elif not os.path.isdir(path):
-            raise FileExistsError(_ERR_PATH_NOT_DIR.format(path))
-    else:
-        create = True
-
-    if create:
-        LOGGER.debug("Creating directory %s", path)
-        os.makedirs(path)
 
 
 @contextmanager

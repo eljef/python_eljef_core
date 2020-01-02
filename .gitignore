@@ -1,8 +1,12 @@
+./.coverage
+
 .idea/codeStyles/
 .idea/*.xml
 .idea/*.iml
 .idea/inspectionProfiles/
 .idea/dictionaries/*.xml
+
+./pytest_cache
 
 /docs/build/*
 /docs/source/_static/*

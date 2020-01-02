@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2017-2020, Jef Oliver
+# Copyright (c) 2020, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -13,27 +13,20 @@
 # Authors:
 # Jef Oliver <jef@eljef.me>
 #
-# strings.py : string operations
-"""ElJef String Operations
+# test_version.py : ElJef Version Test
+"""ElJef Version Test
 
-This module holds functions for string operations
+ElJef Version Test
 """
 
-from typing import AnyStr
+import logging
+import unittest
+
+from eljef.core import __version__
+
+logging.disable(logging.ERROR)
 
 
-def makestr(data: AnyStr) -> str:
-    """Return a decoded string
-
-    If ``data`` is encoded (bytes), it is decoded before returned.
-
-    Args:
-        data: data to return decoded
-
-    Returns:
-        Decoded string
-    """
-    try:
-        return str(data.decode('utf-8'))
-    except AttributeError:
-        return str(data)
+class TestVersion(unittest.TestCase):
+    def test_version(self):
+        self.assertTrue(__version__.VERSION is not None)

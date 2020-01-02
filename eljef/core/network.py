@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2016-2018, Jef Oliver
+# Copyright (c) 2016-2020, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -21,14 +21,11 @@ This module holds functionality for basic network operations
 
 import ipaddress
 import logging
-import platform
-import subprocess
 
-from eljef.core.check import version_check
+# pylint: disable=no-name-in-module
+from scapy.all import ICMP, IP, sr1
 
 LOGGER = logging.getLogger(__name__)
-
-version_check(3, 6)
 
 
 def address_is_ip(address: str) -> int:
@@ -55,6 +52,8 @@ def host_is_up(address: str) -> bool:
     """Sends a ping to a host to determine if it is up.
 
     Note:
+        This must be run with elevated privileges on some operating systems due to ICMP requiring raw sockets,
+        and raw sockets are typically limited.
         This will only work for hosts that do not block ICMP pings.
 
     Args:
@@ -63,8 +62,6 @@ def host_is_up(address: str) -> bool:
     Returns:
         True if host responded to ping, False otherwise.
     """
-    p_arg = "-n" if platform.system().lower() == "windows" else "-c"
-    args = ['ping', p_arg, '1', address]
-    LOGGER.debug("Pinging host with: %s", ' '.join(args))
-    output = subprocess.run(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    return output.returncode == 0
+    resp = sr1(IP(dst=address) / ICMP(), timeout=2)
+
+    return resp is not None

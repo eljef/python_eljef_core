@@ -1,8 +1,39 @@
+VERSION := 0.0.17
+
+build:
+	python3 setup.py build
+
 clean:
-	rm -rf build dist eljef_core.egg-info eljef/__pycache__ eljef/core/__pycache__
+	rm -rf build dist eljef_core.egg-info \
+		eljef/__pycache__ eljef/core/__pycache__ \
+		tests/__pycache__ tests/_trial_temp \
+		tests/.pytest_cache .coverage
+
+depsinstall:
+	pip install -r requirements.txt
+
+depsupdate:
+	pip install --upgrade -r requirements.txt
 
 install:
 	python3 setup.py install
 
 lint:
-	@tools/dolint.sh || true
+	flake8 eljef/core
+	pylint eljef/core
+
+test:
+	pytest
+
+testcoverage:
+	pytest --cov=eljef/ tests/
+
+versionget:
+	@echo $(VERSION)
+
+versionset:
+	@$(eval OLDVERSION=$(shell cat setup.py | awk -F"[=,]" '/version=/{gsub("\047", ""); print $$2}'))
+	@sed -i -e "s/$(OLDVERSION)/$(VERSION)/" eljef/core/__version__.py
+	@sed -i -e "s/version = '$(OLDVERSION)'/version = '$(VERSION)'/" \
+	        -e "s/release = '$(OLDVERSION)'/release = '$(VERSION)'/" docs/source/conf.py
+	@sed -i -e "s/version='$(OLDVERSION)'/version='$(VERSION)'/" setup.py

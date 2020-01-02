@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2017-2018, Jef Oliver
+# Copyright (c) 2017-2020, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -49,7 +49,7 @@ def dumps(data: dict, **kwargs) -> str:
     return ret.strip()
 
 
-def loads(data: str) -> dict:
+def loads(data: str, **kwargs) -> dict:
     """Creates a dictionary of key value pairs from a key value pair string.
 
     The string is expected to contain key value pairs that are separated by new line characters,
@@ -59,6 +59,10 @@ def loads(data: str) -> dict:
 
     Args:
         data: Data from the read file.
+
+    Keyword Args:
+        comment: If the file contains lines with comments after data, everything after this character
+                 will be stripped
     """
     ret = dict()
     new_data = makestr(data.replace('\r\n', '\n')).split('\n')
@@ -66,7 +70,12 @@ def loads(data: str) -> dict:
         for line in new_data:
             new_line = line.strip()
             if new_line and new_line[0] not in _COMMENT_CHECKS and '=' in new_line:
-                key, value = new_line.split('=', 1)
+                inline_comment_symbol = kwargs.get('comment')
+                if inline_comment_symbol:
+                    line = new_line.split(inline_comment_symbol, 1)
+                    key, value = line[0].split('=', 1)
+                else:
+                    key, value = new_line.split('=', 1)
                 ret[key.strip()] = value.strip()
 
     return ret

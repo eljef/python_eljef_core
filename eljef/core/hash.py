@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2016-2018, Jef Oliver
+# Copyright (c) 2016-2020, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -18,16 +18,14 @@
 
 This module holds functions for encoding and hashing data.
 """
+
 import base64
 import hashlib
 import logging
 
 from eljef.core import fops
-from eljef.core.check import version_check
 
 LOGGER = logging.getLogger(__name__)
-
-version_check(3, 6)
 
 BLOCK_SIZE = 65536
 
@@ -40,6 +38,10 @@ def encode_base64(path: str) -> str:
 
     Returns:
         Base64 encoded data as a string
+
+    Raises:
+        FileNotFoundError: When file does not exist
+        IsADirectoryError: When specified path is a directory
     """
     LOGGER.debug("base64 encoding data from %s", path)
     with open(path, 'rb') as file_data:
@@ -54,6 +56,10 @@ def hash_md5(path: str) -> str:
 
     Returns:
         string form of MD5 hash
+
+    Raises:
+        FileNotFoundError: When file does not exist
+        IsADirectoryError: When specified path is a directory
     """
     LOGGER.debug("Generating MD5 hash for %s", path)
     h_md5 = hashlib.md5()
@@ -77,7 +83,7 @@ def hash_sha256(path: str) -> str:
 
     Raises:
         FileNotFoundError: When file does not exist
-        IOError: When specified path is not a file
+        IsADirectoryError: When specified path is a directory
     """
     LOGGER.debug("Generating SHA256 hash for %s", path)
     h_sha256 = hashlib.sha256()
@@ -88,3 +94,27 @@ def hash_sha256(path: str) -> str:
             buf = hash_file.read(BLOCK_SIZE)
 
     return fops.makestr(h_sha256.hexdigest())
+
+
+def hash_sha512(path: str) -> str:
+    """Creates a SHA512 hash for `path`
+
+    Args:
+        path: Full path to file to create hash for.
+
+    Returns:
+        string form of SHA256 hash
+
+    Raises:
+        FileNotFoundError: When file does not exist
+        IsADirectoryError: When specified path is a directory
+    """
+    LOGGER.debug("Generating SHA512 hash for %s", path)
+    h_sha512 = hashlib.sha512()
+    with open(path, 'rb') as hash_file:
+        buf = hash_file.read(BLOCK_SIZE)
+        while buf:
+            h_sha512.update(buf)
+            buf = hash_file.read(BLOCK_SIZE)
+
+    return fops.makestr(h_sha512.hexdigest())

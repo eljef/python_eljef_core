@@ -1,3 +1,19 @@
-colorlog >= 3.1.4
-PyYAML >= 5.1
-xmltodict >= 0.11.0
+# Library dependencies
+# pip install -r requirements.txt
+
+#### Required for operation ####
+colorlog>=4.0.0
+PyYAML>=5.1
+scapy
+xmltodict>=0.12.0
+
+#### Needed for linting ####
+flake8
+pylint
+
+#### Needed for testing ####
+pytest
+pytest-pythonpath # so tests can be run from the separated tests directory
+
+#### Needed for testing coverage ****
+pytest-cov
