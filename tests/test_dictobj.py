@@ -101,6 +101,11 @@ class TestDictObj(unittest.TestCase):
         got = d.to_dict()
         self.assertDictEqual(want, got)
 
+    def test_dictobj_update(self):
+        d = self._return_dictobj()
+        d.update({'new_test': 'test'})
+        self.assertEqual(d.new_test, 'test')
+
 
 if __name__ == '__main__':
     unittest.main()

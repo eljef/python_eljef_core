@@ -22,7 +22,7 @@ This module holds the Dictionary Object class.
 import logging
 
 from collections import abc
-from typing import Any
+from typing import Any, Mapping
 
 LOGGER = logging.getLogger(__name__)
 
@@ -108,3 +108,14 @@ class DictObj(abc.Mapping):
                 ret[key] = self.__dict__[key]
 
         return ret
+
+    def update(self, new_dict: Mapping, **kwargs) -> None:
+        """Update updates the DictObj with the provided dictionary or iterable
+
+        Args:
+            new_dict: dictionary or iterable to update dictionary from
+
+        Note:
+            Keyword args are iterated and used to update the DictObj
+        """
+        self.__dict__.update(new_dict, **kwargs)
