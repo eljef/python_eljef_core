@@ -24,6 +24,7 @@ from typing import Any
 from typing import Union
 
 from eljef.core import fops
+from eljef.core.merge import merge_dictionaries
 
 LOGGER = logging.getLogger(__name__)
 
@@ -46,8 +47,7 @@ class Settings:
     """
     def __init__(self, defaults: dict, user_path: str = None,
                  sys_path: str = None) -> None:
-        self._settings = defaults
-        self._settings.update(self.read(sys_path, user_path))
+        self._settings = merge_dictionaries(defaults, self.read(sys_path, user_path))
 
     def get(self, setting: str) -> Union[Any, None]:
         """Retrieve a settings value
@@ -79,7 +79,10 @@ class Settings:
         Returns:
             A dictionary filled with system settings, overlapped with the user specific settings
         """
-        settings_data = fops.file_read_convert(system_path, 'yaml', True)
-        settings_data.update(fops.file_read_convert(user_path, 'yaml', True))
+        ret = dict()
+        if system_path:
+            ret = merge_dictionaries(ret, fops.file_read_convert(system_path, 'yaml', True))
+        if user_path:
+            ret = merge_dictionaries(ret, fops.file_read_convert(user_path, 'yaml', True))
 
-        return settings_data
+        return ret
