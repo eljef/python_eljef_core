@@ -1,4 +1,4 @@
-VERSION := 1.1.0
+VERSION := 1.1.1
 
 build:
 	python3 setup.py build
