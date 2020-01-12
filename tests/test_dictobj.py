@@ -94,10 +94,14 @@ class TestDictObj(unittest.TestCase):
         want = {
             'test': 'test'
         }
+        want2 = {
+            'test3': 'test3'
+        }
         d = self._return_dictobj()
-        d.pop('test2')
+        got2 = d.pop('test2').to_dict()
         got = d.to_dict()
         self.assertDictEqual(want, got)
+        self.assertDictEqual(want2, got2)
 
     def test_dictobj_to_dict(self):
         want = {
