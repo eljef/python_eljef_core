@@ -94,6 +94,9 @@ class DictObj(abc.Mapping):
     def __setitem__(self, key: Any, value: Any) -> None:
         self.__dict__[key] = value
 
+    def pop(self, key: Any) -> None:
+        self.__dict__.pop(key)
+
     def to_dict(self) -> dict:
         """Dumps a dictionary form of the DictObj object.
 
