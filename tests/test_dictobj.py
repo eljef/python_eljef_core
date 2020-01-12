@@ -103,6 +103,11 @@ class TestDictObj(unittest.TestCase):
         self.assertDictEqual(want, got)
         self.assertDictEqual(want2, got2)
 
+        self.assertRaises(KeyError, d.pop, 'test3')
+
+        got = d.pop('test4', 'test9')
+        self.assertEqual(got, 'test9')
+
     def test_dictobj_to_dict(self):
         want = {
             'test': 'test',

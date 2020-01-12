@@ -22,7 +22,7 @@ This module holds the Dictionary Object class.
 import logging
 
 from collections import abc
-from typing import Any, Mapping
+from typing import Any, Mapping, overload
 
 LOGGER = logging.getLogger(__name__)
 
@@ -94,8 +94,31 @@ class DictObj(abc.Mapping):
     def __setitem__(self, key: Any, value: Any) -> None:
         self.__dict__[key] = value
 
-    def pop(self, key: Any, default: Any = None) -> Any:
-        return self.__dict__.pop(key, default)
+    @overload
+    def pop(self, key: Any) -> Any: ...
+
+    @overload
+    def pop(self, key: Any, default: Any) -> Any: ...
+
+    def pop(self, key, *args) -> Any:
+        """Removes a key/attribute from the DictObj
+
+        Args:
+            key: key/attribute to remove from the DictObj
+            *args: default to return if key is not found in dictionary
+
+        Returns:
+            The value stored at key before deleting the key
+
+
+        Note:
+            Only args[0] is passed to the internal pop method.
+            All other arguments are ignored.
+        """
+        if args:
+            return self.__dict__.pop(key, args[0])
+        else:
+            return self.__dict__.pop(key)
 
     def to_dict(self) -> dict:
         """Dumps a dictionary form of the DictObj object.
