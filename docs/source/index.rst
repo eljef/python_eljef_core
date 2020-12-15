@@ -10,6 +10,7 @@ ElJef Core
    eljef.core.fops
    eljef.core.hash
    eljef.core.kv
+   eljef.core.merge
    eljef.core.network
    eljef.core.settings
    eljef.core.strings

@@ -2,9 +2,9 @@
 # pip install -r requirements.txt
 
 #### Required for operation ####
-colorlog>=4.0.0
-PyYAML>=5.1
-xmltodict>=0.12.0
+colorlog
+PyYAML
+xmltodict
 
 #### Needed for linting ####
 flake8

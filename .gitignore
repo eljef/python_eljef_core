@@ -1,19 +1,15 @@
 /.coverage
 
-.idea/codeStyles/
-.idea/*.xml
-.idea/*.iml
-.idea/inspectionProfiles/
-.idea/dictionaries/*.xml
+/.idea
 
-./pytest_cache
+/.pytest_cache
 
 /docs/build/*
 /docs/source/_static/*
 
 /build/
-dist/
-eljef_core.egg-info/
+/dist/
+/eljef_core.egg-info/
 __pycache__/
 *.py[cod]
 
@@ -22,4 +18,3 @@ __pycache__/
 !/.flake8
 !/.gitattributes
 !/.gitignore
-!/.idea/dictionaries/eljef_core.xml
