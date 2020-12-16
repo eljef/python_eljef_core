@@ -67,14 +67,14 @@ class DictObj(abc.Mapping):
     def __delattr__(self, item: str) -> None:
         try:
             self.__dict__.__delitem__(item)
-        except KeyError:
-            raise AttributeError("'{0} object has no attribute '{1}'".format(self.__class__.__name__, item))
+        except KeyError as error:
+            raise AttributeError("'{0} object has no attribute '{1}'".format(self.__class__.__name__, item)) from error
 
     def __getattr__(self, item: str) -> Any:
         try:
             return self.__dict__[item]
-        except KeyError:
-            raise AttributeError("'{0} object has no attribute '{1}'".format(self.__class__.__name__, item))
+        except KeyError as error:
+            raise AttributeError("'{0} object has no attribute '{1}'".format(self.__class__.__name__, item)) from error
 
     def __delitem__(self, item: Any) -> None:
         self.__dict__.__delitem__(item)
@@ -95,10 +95,10 @@ class DictObj(abc.Mapping):
         self.__dict__[key] = value
 
     @overload
-    def pop(self, key: Any) -> Any: ...
+    def pop(self, key: Any) -> Any: ...  # noqa: E704
 
     @overload
-    def pop(self, key: Any, default: Any) -> Any: ...
+    def pop(self, key: Any, default: Any) -> Any: ...  # noqa: E704
 
     def pop(self, key, *args) -> Any:
         """Removes a key/attribute from the DictObj
@@ -117,8 +117,8 @@ class DictObj(abc.Mapping):
         """
         if args:
             return self.__dict__.pop(key, args[0])
-        else:
-            return self.__dict__.pop(key)
+
+        return self.__dict__.pop(key)
 
     def to_dict(self) -> dict:
         """Dumps a dictionary form of the DictObj object.
