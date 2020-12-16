@@ -384,6 +384,21 @@ class TestFileWriteConvert(unittest.TestCase):
             self.assertEqual(value, got, msg=key)
 
 
+class TestListFilesByExtension(unittest.TestCase):
+    def test_list_files_by_extension(self):
+        data = ['test1.txt', 'test2.txt']
+        path = tempfile.mkdtemp(dir=tempfile.gettempdir())
+        Path(os.path.join(path, 'test1.txt')).touch()
+        Path(os.path.join(path, 'test2.txt')).touch()
+        Path(os.path.join(path, 'test3.txt.nope')).touch()
+
+        got = fops.list_files_by_extension(path, 'txt')
+        _cleanup(path)
+
+        self.assertCountEqual(data, got)
+        self.assertListEqual(sorted(data), sorted(got))
+
+
 class TestPushd(unittest.TestCase):
     def test_pushd_directory_does_not_exist(self):
         def child():

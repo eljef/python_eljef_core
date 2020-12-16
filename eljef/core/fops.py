@@ -22,6 +22,7 @@ directories and files).
 
 from collections import OrderedDict
 from contextlib import contextmanager
+from pathlib import Path
 from typing import AnyStr
 from typing import Union
 
@@ -280,6 +281,26 @@ def file_write_convert(path: str, data_type: str, data: Union[dict, OrderedDict]
     dumper = __CONV_DATA_TO_STR[data_type.lower()]
     write_string = dumper(data, **dumper_kwargs).replace('\r\n', '\n') + '\n'
     file_write(path, write_string, backup=kwargs.get('backup', False), newline='\n')
+
+
+def list_files_by_extension(base_path: str, file_ext: str) -> list:
+    """Creates a list of files by ``file_ext``, relative to the provided ``base_path``.
+
+    Args:
+        base_path: Full path to the base directory to traverse for files.
+        file_ext: Extension for files to find. This should not contain wild cards or dots.
+
+    Returns:
+        A list of files by ``file_ext``, relative to the provided ``base_path``.
+
+    Note:
+        If no files of the type ``file_ext`` are found, an empty list is returned.
+    """
+    files = []
+    for path in Path(base_path).rglob(f'*.{file_ext}'):
+        files.append(path.name)
+
+    return files
 
 
 @contextmanager
