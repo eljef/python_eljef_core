@@ -13,6 +13,6 @@ setup(
     packages=['eljef.core'],
     python_requires='>=3.8',
     url='https://github.com/eljef/python_eljef_core',
-    version='1.4.1',
+    version='1.4.2',
     zip_safe=False,
 )
