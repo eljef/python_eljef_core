@@ -297,8 +297,9 @@ def list_files_by_extension(base_path: str, file_ext: str) -> list:
         If no files of the type ``file_ext`` are found, an empty list is returned.
     """
     files = []
-    for path in Path(base_path).rglob(f'*.{file_ext}'):
-        files.append(path.name)
+    with pushd(base_path):
+        for path in Path().rglob(f'*.{file_ext}'):
+            files.append(os.path.join(*path.parts))
 
     return files
 
