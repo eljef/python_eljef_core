@@ -384,6 +384,28 @@ class TestFileWriteConvert(unittest.TestCase):
             self.assertEqual(value, got, msg=key)
 
 
+class TestListDirsByExtension(unittest.TestCase):
+    def test_list_dirs_by_extension(self):
+        path = tempfile.mkdtemp(dir=tempfile.gettempdir())
+        path1 = tempfile.mkdtemp(dir=path)
+        path2 = tempfile.mkdtemp(dir=path)
+        path3 = tempfile.mkdtemp(dir=path)
+        path4 = tempfile.mkdtemp(dir=path)
+        path5 = tempfile.mkdtemp(dir=path)
+        data = {os.path.basename(path1), os.path.basename(path2), os.path.basename(path5)}
+        Path(os.path.join(path1, 'test.txt')).touch()
+        Path(os.path.join(path2, 'test.txt')).touch()
+        Path(os.path.join(path3, 'test.json')).touch()
+        Path(os.path.join(path4, 'test.not_txt')).touch()
+        Path(os.path.join(path5, 'test.txt')).touch()
+
+        got = fops.list_dirs_by_extension(path, 'txt')
+        _cleanup(path)
+
+        self.assertCountEqual(data, got)
+        self.assertSetEqual(data, got)
+
+
 class TestListFilesByExtension(unittest.TestCase):
     def test_list_files_by_extension(self):
         data = ['test1.txt', 'test2.txt']

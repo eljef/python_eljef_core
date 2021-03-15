@@ -283,6 +283,28 @@ def file_write_convert(path: str, data_type: str, data: Union[dict, OrderedDict]
     file_write(path, write_string, backup=kwargs.get('backup', False), newline='\n')
 
 
+def list_dirs_by_extension(base_path: str, file_ext: str) -> set:
+    """Creates a list of directories containing files of ``file_ext``.
+
+    Args:
+        base_path: Full path tot he base directory to traverse for files.
+        file_ext: Extension for files to find. This should not contain wild cards.
+
+    Returns:
+        A set of directories that contain files with ``file_ext``, relative to
+        ``base_path``.
+
+    Note:
+        Returned paths are relative to ``base_path``.
+    """
+    dirs = []
+    with pushd(base_path):
+        for path in Path().rglob(f'*.{file_ext}'):
+            dirs.append(os.path.join(*path.parent.parts))
+
+    return set(dirs)
+
+
 def list_files_by_extension(base_path: str, file_ext: str) -> list:
     """Creates a list of files by ``file_ext``, relative to the provided ``base_path``.
 
