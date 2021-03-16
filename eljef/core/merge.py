@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2020, Jef Oliver
+# Copyright (c) 2020-2021, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -28,11 +28,10 @@ def merge_dictionaries(dict_a: dict, dict_b: dict) -> dict:
 
     Args:
         dict_a: dictionary to be considered as original
-        dict_b: dictionary of values to embed into dict_a
+        dict_b: dictionary of values to embed into ``dict_a``
 
     Returns:
-        a new dictionary with values from dict_a and dict_b, including
-        embedded dicts.
+        A new dictionary with values from ``dict_a`` and ``dict_b``, including embedded dicts.
     """
     new = deepcopy(dict_a)
 

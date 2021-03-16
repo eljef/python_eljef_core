@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2017-2020, Jef Oliver
+# Copyright (c) 2017-2021, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -35,7 +35,7 @@ def dumps(data: dict, **kwargs) -> str:
         spaced: Add a space around the equals sign separating the key and value
 
     Raises:
-        TypeError if a value is a dictionary, set, or list
+        TypeError: A value is a dictionary, set, or list
     """
     ret = ''
     equals_str = '=' if not kwargs.get('spaced', False) else ' = '

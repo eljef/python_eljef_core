@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2016-2020, Jef Oliver
+# Copyright (c) 2016-2021, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -26,13 +26,13 @@ LOGGER = logging.getLogger(__name__)
 
 
 def address_is_ip(address: str) -> int:
-    """Checks if an address is an IP address.
+    """Checks if ``address`` is an IP address and what version it is.
 
     Args:
         address: IP address to verify.
 
     Returns:
-        0 if address could not be verified, 4 if the address is IPv4, or 6 if the address is IPv6
+        0 if ``address`` could not be verified, 4 if ``address`` is IPv4, or 6 if ``address`` is IPv6.
     """
     LOGGER.debug("Validating IP address: %s", address)
     try:

@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2017-2020, Jef Oliver
+# Copyright (c) 2017-2021, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -14,10 +14,7 @@
 # Jef Oliver <jef@eljef.me>
 #
 # dictobj.py : Dictionary Object
-"""ElJef Dictionary Object
-
-This module holds the Dictionary Object class.
-"""
+"""ElJef Dictionary Object."""
 
 import logging
 

@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2016-2020, Jef Oliver
+# Copyright (c) 2016-2021, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -31,17 +31,17 @@ BLOCK_SIZE = 65536
 
 
 def encode_base64(path: str) -> str:
-    """Reads a file and converts the data to a base64 encode string
+    """Reads ``path`` and converts the data to a base64 encode string
 
     Args:
-        path: File to base64 encode contents of
+        path: Full path to file to base64 encode contents of
 
     Returns:
         Base64 encoded data as a string
 
     Raises:
-        FileNotFoundError: When file does not exist
-        IsADirectoryError: When specified path is a directory
+        FileNotFoundError: When ``path`` does not exist
+        IsADirectoryError: When ``path`` is a directory
     """
     LOGGER.debug("base64 encoding data from %s", path)
     with open(path, 'rb') as file_data:
@@ -58,8 +58,8 @@ def hash_md5(path: str) -> str:
         string form of MD5 hash
 
     Raises:
-        FileNotFoundError: When file does not exist
-        IsADirectoryError: When specified path is a directory
+        FileNotFoundError: When ``path`` does not exist
+        IsADirectoryError: When ``path`` is a directory
     """
     LOGGER.debug("Generating MD5 hash for %s", path)
     h_md5 = hashlib.md5()
@@ -73,7 +73,7 @@ def hash_md5(path: str) -> str:
 
 
 def hash_sha256(path: str) -> str:
-    """Creates a SHA256 hash for `path`
+    """Creates a SHA256 hash for ``path``
 
     Args:
         path: Full path to file to create hash for.
@@ -82,8 +82,8 @@ def hash_sha256(path: str) -> str:
         string form of SHA256 hash
 
     Raises:
-        FileNotFoundError: When file does not exist
-        IsADirectoryError: When specified path is a directory
+        FileNotFoundError: When ``path`` does not exist
+        IsADirectoryError: When ``path`` is a directory
     """
     LOGGER.debug("Generating SHA256 hash for %s", path)
     h_sha256 = hashlib.sha256()
@@ -97,7 +97,7 @@ def hash_sha256(path: str) -> str:
 
 
 def hash_sha512(path: str) -> str:
-    """Creates a SHA512 hash for `path`
+    """Creates a SHA512 hash for ``path``
 
     Args:
         path: Full path to file to create hash for.
@@ -106,8 +106,8 @@ def hash_sha512(path: str) -> str:
         string form of SHA256 hash
 
     Raises:
-        FileNotFoundError: When file does not exist
-        IsADirectoryError: When specified path is a directory
+        FileNotFoundError: When ``path`` does not exist
+        IsADirectoryError: When ``path`` is a directory
     """
     LOGGER.debug("Generating SHA512 hash for %s", path)
     h_sha512 = hashlib.sha512()

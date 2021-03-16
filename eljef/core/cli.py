@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2017-2020, Jef Oliver
+# Copyright (c) 2017-2021, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -14,9 +14,9 @@
 # Jef Oliver <jef@eljef.me>
 #
 # cli.py : ElJef Application CLI Functions
-"""ElJef Application CLI Functions
+"""ElJef Application CLI Functions.
 
-ElJef Application CLI Functions.
+This module holds functions to make setting up a CLI application easier.
 """
 from collections import namedtuple
 from typing import List
@@ -39,7 +39,7 @@ def args_simple(name: str, desc: str, args: List[Arg], exit_on_error: bool = Tru
     Args:
         name: Program name.
         desc: Program description.
-        args: List of Arg named tuples
+        args: List of :class:`Arg`
         exit_on_error: Exit if an error is encountered
 
     Returns:

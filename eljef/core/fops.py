@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2016-2020, Jef Oliver
+# Copyright (c) 2016-2021, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -71,21 +71,21 @@ _ERR_PATH_NOT_FILE = "Provided path exists, but is not a file: {0!s}"
 _ERR_DATA_TYPE = "Unsupported data_type: {0!s}"
 _ERR_NO_DATA = "No data provided"
 
-"""JSON data type"""
 JSON = 'json'
-"""Key/Value data type"""
+"""JSON data type"""
 KV = 'kv'
-"""XML data type"""
+"""Key/Value data type"""
 XML = 'xml'
-"""YAML data type"""
+"""XML data type"""
 YAML = 'yaml'
+"""YAML data type"""
 
 
 def backup_path(path: str) -> None:
     """Renames a directory/file/link for backup purposes
 
-    This will append the .bak extension to a file. If path.bak exists, a number is appended until a non-existent file
-    is found.
+    This will append the .bak extension to a file. If ``path``.bak exists, a number is appended until a non-existent
+    file is found.
     ie: file.bak file.bak.1 file.bak.2
 
     Args:
@@ -113,10 +113,12 @@ def delete(path: str, follow: bool = False, backup: bool = False) -> None:
 
     Args:
         path: Directory, file, or link to delete
-        follow: If True, and path is a symlink, the parent for the symlink is deleted as well.
-        backup: If True, backup `path` before deleting. (If `path` is a symlink, the link will still be unlinked, and
-                the parent will be retained instead of being deleted. The parent will need to be backed up or deleted
-                separately.)
+        follow: If True, and ``path`` is a symlink, the parent for the symlink is deleted as well.
+        backup: If True, backup ``path`` before deleting.
+
+    Note:
+        If ``path`` is a symlink and ``follow`` is not True, the link will still be unlinked, and the parent will be
+        retained instead of being deleted. The parent will need to be backed up or deleted separately.
     """
     try:
         if os.path.islink(path):
@@ -148,7 +150,6 @@ def file_read(path: str, strip: bool = False) -> str:
 
     Reads a file into memory and returns it as a string.
     This is not a good function to use if the file is large.
-    This function replaces unicode errors with "?".
 
     Args:
         path: Full path to the file to read.
@@ -156,6 +157,9 @@ def file_read(path: str, strip: bool = False) -> str:
 
     Returns:
         Data from file stored as a string
+
+    Note:
+        This function replaces unicode errors with "?".
     """
     LOGGER.debug("Read file: %s", path)
     with open(path, errors='replace') as file_data:
@@ -167,17 +171,15 @@ def file_read_convert(path: str, data_type: str, default: bool = False) -> Union
 
     Args:
         path: Path to file to read.
-        data_type: Type of data contained.
-                   Supported: JSON, KV, XML, YAML
-                              kv = key=value pairs
+        data_type: Type of data contained. (JSON, KV, XML, YAML)
         default: If true and the file is missing, an empty dictionary will be returned.
 
     Returns:
         A dictionary of parsed data.
 
     Raises:
-        FileNotFoundError: If provided path does not exist and ``default`` is not True.
-        IOError: If provided path exists but is not a file or a link to a file.
+        FileNotFoundError: If provided ``path`` does not exist and ``default`` is not True.
+        IOError: If provided ``path`` exists but is not a file or a link to a file.
         ValueError: Unsupported ``data_type``
     """
     data_type_lower = data_type.lower()
@@ -207,10 +209,10 @@ def file_write(path: str, data: AnyStr, backup: bool = False, newline: str = Non
 
     Args:
         path: Full path to the file to write `data` to.
-        data: Data to write to `path`
+        data: Data to write to ``path``
         backup: Backup the file before writing to it. (Default is False.)
-        newline: Passed to the open function for newline translation. The default of None lets native translation
-                 happen.
+        newline: Passed to the open function for newline translation. The default
+            of None lets native translation happen.
     """
     mode = 'a' if not os.path.isfile(path) else 'w'
 
@@ -224,27 +226,27 @@ def file_write(path: str, data: AnyStr, backup: bool = False, newline: str = Non
 
 
 def file_write_convert_defaults(data_type: str) -> dict:
-    """Returns a dictionary of defaults to be used with file_write_convert
+    """Returns a dictionary of defaults to be used with :func:`file_write_convert`
 
     Args:
-        data_type: Type of data contained.
-                   Supported: JSON, KV, XML, YAML
-                              KV is key=value pairs
+        data_type: Type of data contained. (JSON, KV, XML, YAML)
 
     Returns:
-        A dictionary of keyword arguments to be passed to file_write_convert
+        A dictionary of keyword arguments to be passed to :func:`file_write_convert`
 
     Raises:
         ValueError: Unsupported ``data_type``
 
     Note:
-        The returned dictionary contains defaults that eljef.core.fops uses for writing different files. These defaults
-        can be changed. Extra options can be appended to the dictionary as well. You'll need to read each dumpers
-        documentation for argument information.
+        The returned dictionary contains defaults that :func:`file_write_convert` uses for writing different files.
+        These defaults can be changed. Extra options can be appended to the dictionary as well. You'll need to read
+        each dumpers documentation for argument information.
 
         Dumper Defaults:
             JSON -> json.dumps:
                 indent: 4
+            KV -> kv.dumps:
+                spaced: False
             XML -> xmltodict.unparse:
                 pretty: True
                 full_document: True,
@@ -261,16 +263,14 @@ def file_write_convert(path: str, data_type: str, data: Union[dict, OrderedDict]
     """Writes a Python dictionary to file using the specified ``data_type`` module for conversion.
 
     Args:
-        path: Full path to the file to write `data` to.
-        data_type: Type of data contained.
-                   Supported: JSON, KV, XML, YAML
-                              KV is key=value pairs
-        data: Data to write to `path`
+        path: Full path to the file to write ``data`` to.
+        data_type: Type of data contained. (JSON, KV, XML, YAML)
+        data: Data to write to ``path``.
 
     Keyword Args:
-        backup: Backup the file before writing to it. (Default is False.)
+        backup: Backup ``path`` before writing to it. (Default is False.)
         dumper_args: A dictionary of keyword arguments to pass to the specified dumper.
-                     See ``file_write_convert_defaults``
+                     See :func:`file_write_convert_defaults`
     """
     dumper_kwargs = file_write_convert_defaults(data_type)
     dumper_args = kwargs.get('dumper_args', None)
@@ -336,10 +336,10 @@ def pushd(path: str) -> None:
     Raises:
         FileNotFoundError: If provided path does not exist
 
-    Examples:
-    >>> with pushd('/path/to/dir'):
-    >>>     print('moved to new directory')
-    >>>     print(os.getcwd())
+    Example:
+        >>> with pushd('/path/to/dir'):
+        >>>     print('moved to new directory')
+        >>>     print(os.getcwd())
     """
     if not os.path.isdir(path):
         raise FileNotFoundError(_ERR_PATH_NOT_EXIST.format(path))

@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2017-2020, Jef Oliver
+# Copyright (c) 2017-2021, Jef Oliver
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms and conditions of the GNU Lesser General Public License,
@@ -14,10 +14,7 @@
 # Jef Oliver <jef@eljef.me>
 #
 # applog.py : ElJef Application Logging Setup
-"""ElJef Application Logging Setup
-
-ElJef Application Logging Setup.
-"""
+"""ElJef Application Logging Setup."""
 
 import logging
 import sys
@@ -33,12 +30,15 @@ DEFAULT_COLORS = {
 
 
 def setup_app_logging(debug: bool, log_file: str = None, colors: dict = None) -> None:
-    """Sets up the root logger. Colorized console logging is enabled by default.
+    """Sets up the root logger.
 
     Args:
         debug: Enable DEBUG logging level. Default is INFO.
         log_file: If specified, logging to a file is enabled.
         colors: Colors (supported by colorlog) to enable for logging messages displayed on the console.
+
+    Note:
+        Colorized console logging is enabled by default.
     """
     color_dict = colors if colors else DEFAULT_COLORS
 

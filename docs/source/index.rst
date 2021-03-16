@@ -6,6 +6,7 @@ ElJef Core
    :hidden:
 
    eljef.core.applog
+   eljef.core.cli
    eljef.core.dictobj
    eljef.core.fops
    eljef.core.hash
