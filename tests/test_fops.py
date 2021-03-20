@@ -441,5 +441,22 @@ class TestPushd(unittest.TestCase):
         self.assertEqual(data, got)
 
 
+# noinspection PyBroadException
+class TestRequiredExecutables(unittest.TestCase):
+    def test_required_executables_exist(self):
+        try:
+            fops.required_executables(['python'])
+            test_var = True
+        except Exception:
+            test_var = False
+
+        self.assertTrue(test_var)
+
+    def test_required_executables_not_exist(self):
+        def child():
+            fops.required_executables(['this_definitely_should_not_exist_at_all'])
+        self.assertRaises(SystemExit, child)
+
+
 if __name__ == '__main__':
     unittest.main()

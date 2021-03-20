@@ -349,3 +349,17 @@ def pushd(path: str) -> None:
     yield
     os.chdir(cwd)
     LOGGER.debug("popd %s", path)
+
+
+def required_executables(executables: list) -> None:
+    """Checks if the list of required executables are available.
+
+    Args:
+        executables: List of executables required to run the calling program.
+
+    Raises:
+        SystemExit: When an executable is not found.
+    """
+    for executable in executables:
+        if not shutil.which(executable):
+            raise SystemExit("Required executable not found: %s" % executable)
