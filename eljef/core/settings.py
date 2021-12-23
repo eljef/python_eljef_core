@@ -79,7 +79,7 @@ class Settings:
         Returns:
             A dictionary filled with system settings, overlapped with the user specific settings
         """
-        ret = dict()
+        ret = {}
         if system_path:
             ret = merge_dictionaries(ret, fops.file_read_convert(system_path, 'yaml', True))
         if user_path:

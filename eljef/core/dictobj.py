@@ -65,13 +65,13 @@ class DictObj(abc.Mapping):
         try:
             self.__dict__.__delitem__(item)
         except KeyError as error:
-            raise AttributeError("'{0} object has no attribute '{1}'".format(self.__class__.__name__, item)) from error
+            raise AttributeError(f"'{self.__class__.__name__} object has no attribute '{item}'") from error
 
     def __getattr__(self, item: str) -> Any:
         try:
             return self.__dict__[item]
         except KeyError as error:
-            raise AttributeError("'{0} object has no attribute '{1}'".format(self.__class__.__name__, item)) from error
+            raise AttributeError(f"'{self.__class__.__name__} object has no attribute '{item}'") from error
 
     def __delitem__(self, item: Any) -> None:
         self.__dict__.__delitem__(item)
@@ -83,7 +83,7 @@ class DictObj(abc.Mapping):
         return self.__dict__.__len__()
 
     def __repr__(self) -> str:
-        return '{%s}' % str(', '.join('%s : %s' % (key, repr(value)) for (key, value) in self.__dict__.items()))
+        return f"{{{str(', '.join(f'{repr(key)} : {repr(value)}' for (key, value) in self.__dict__.items()))}}}"
 
     def __setattr__(self, key: Any, value: Any) -> None:
         self.__dict__[key] = value
@@ -123,7 +123,7 @@ class DictObj(abc.Mapping):
         Returns:
             A dictionary form of the DictObj object.
         """
-        ret = dict()
+        ret = {}
         for key, value in self.__dict__.items():
             if isinstance(value, DictObj):
                 ret[key] = self.__dict__[key].to_dict()

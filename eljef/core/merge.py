@@ -37,7 +37,7 @@ def merge_dictionaries(dict_a: dict, dict_b: dict) -> dict:
 
     for key, value in dict_b.items():
         if isinstance(value, dict):
-            new[key] = merge_dictionaries(new.get(key, dict()), value)
+            new[key] = merge_dictionaries(new.get(key, {}), value)
         else:
             new[key] = value
 

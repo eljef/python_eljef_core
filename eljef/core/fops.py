@@ -91,7 +91,7 @@ def backup_path(path: str) -> None:
     Args:
         path: Full path to item to backup
     """
-    base_back = "{0!s}.bak".format(path)
+    base_back = f"{path}.bak"
     new_path = base_back
     num_backups = 0
 
@@ -99,7 +99,7 @@ def backup_path(path: str) -> None:
         if os.path.exists(new_path):
             while os.path.exists(new_path):
                 num_backups += 1
-                new_path = "{0!s}.{1!s}".format(base_back, num_backups)
+                new_path = f"{base_back}.{num_backups}"
         LOGGER.debug("Backing up file: %s -> %s", path, new_path)
         os.rename(path, new_path)
 
@@ -162,7 +162,7 @@ def file_read(path: str, strip: bool = False) -> str:
         This function replaces unicode errors with "?".
     """
     LOGGER.debug("Read file: %s", path)
-    with open(path, errors='replace') as file_data:
+    with open(path, errors='replace', encoding='utf8') as file_data:
         return file_data.read().strip() if strip else file_data.read()
 
 
@@ -190,7 +190,7 @@ def file_read_convert(path: str, data_type: str, default: bool = False) -> Union
     if not os.path.exists(path):
         if not default:
             raise FileNotFoundError(_ERR_PATH_NOT_EXIST.format(path))
-        return dict()
+        return {}
 
     if not os.path.isfile(path):
         raise IOError(_ERR_PATH_NOT_FILE.format(path))
@@ -220,7 +220,7 @@ def file_write(path: str, data: AnyStr, backup: bool = False, newline: str = Non
         backup_path(path)
 
     LOGGER.debug("Write to file: %s", path)
-    with open(path, mode, newline=newline) as open_file:
+    with open(path, mode, newline=newline, encoding='utf8') as open_file:
         total_chars = open_file.write(makestr(data))
         LOGGER.debug("Wrote %d characters", total_chars)
 
@@ -362,4 +362,4 @@ def required_executables(executables: list) -> None:
     """
     for executable in executables:
         if not shutil.which(executable):
-            raise SystemExit("Required executable not found: %s" % executable)
+            raise SystemExit(f"Required executable not found: {executable}")

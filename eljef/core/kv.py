@@ -43,7 +43,7 @@ def dumps(data: dict, **kwargs) -> str:
     for key, value in data.items():
         value_type = type(value)
         if value_type in {dict, list, set}:
-            raise TypeError("value for key '{0}' is a {1}".format(key, value_type))
+            raise TypeError(f"value for key '{key}' is a {value_type}")
         ret += makestr(key) + equals_str + makestr(value) + '\n'
 
     return ret.strip()
@@ -64,7 +64,7 @@ def loads(data: str, **kwargs) -> dict:
         comment: If the file contains lines with comments after data, everything after this character
                  will be stripped
     """
-    ret = dict()
+    ret = {}
     new_data = makestr(data.replace('\r\n', '\n')).split('\n')
     if new_data:
         for line in new_data:

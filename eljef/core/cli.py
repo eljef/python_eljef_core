@@ -24,7 +24,7 @@ from typing import List
 import argparse
 
 
-Arg = namedtuple('Arg', 'flags opts', defaults=[list(), dict()])
+Arg = namedtuple('Arg', 'flags opts', defaults=[[], {}])
 """Arg holds information for adding a CLI argument.
 
 Attributes:
