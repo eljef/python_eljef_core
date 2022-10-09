@@ -1,0 +1,30 @@
+# Maintainer: Jef Oliver (jef at eljef dot me)
+
+_pkgname=eljef_core
+pkgname=python-eljef-core
+pkgver=1.6.1
+pkgrel=1
+pkgdesc="Core functions for various utilities written by Jef Oliver"
+arch=('aarch64' 'x86_64')
+url='https://git.eljef.me/python/eljef_core'
+license=('LGPL2.1')
+depends=('python' 'python-colorlog' 'python-yaml' 'python-xmltodict')
+makedepends=('git' 'python-setuptools')
+checkdepends=('python-pytest' 'python-pytest-cov')
+source=("${_pkgname}::git+https://git.eljef.me/python/eljef_core.git")
+sha512sums=('SKIP')
+
+build() {
+    cd "${_pkgname}"
+    python setup.py build
+}
+
+check() {
+    cd "${_pkgname}"
+    pytest
+}
+
+package() {
+    cd "${_pkgname}"
+    python setup.py install --optimize=1 --root="${pkgdir}/"
+}

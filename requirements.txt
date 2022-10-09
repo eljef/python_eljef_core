@@ -12,7 +12,6 @@ pylint
 
 #### Needed for testing ####
 pytest
-pytest-pythonpath # so tests can be run from the separated tests directory
 
 #### Needed for testing coverage ****
 pytest-cov
