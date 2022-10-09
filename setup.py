@@ -9,10 +9,19 @@ setup(
     description='Core functions for various utilities written by Jef Oliver',
     install_requires=['colorlog', 'PyYAML', 'xmltodict'],
     license='LGPLv2.1',
-    name='eljef_core',
+    name='eljef-core',
     packages=['eljef.core'],
     python_requires='>=3.8',
     url='https://github.com/eljef/python_eljef_core',
     version='2022.10.1',
-    zip_safe=False,
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.10',
+    ]
 )
