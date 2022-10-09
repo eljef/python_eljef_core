@@ -2,7 +2,7 @@
 
 _pkgname=eljef_core
 pkgname=python-eljef-core
-pkgver=1.6.1
+pkgver=2022.10.1
 pkgrel=1
 pkgdesc="Core functions for various utilities written by Jef Oliver"
 arch=('aarch64' 'x86_64')
