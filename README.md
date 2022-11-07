@@ -3,7 +3,7 @@
 The ElJef Core API provides core functionality that is shared between all
 utilities written by Jef Oliver.
 
-The Core API is a Python 3.6+ only API.
+The Core API is a Python 3.8+ only API.
 
 #### Documentation
 
