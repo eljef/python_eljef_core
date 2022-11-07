@@ -8,7 +8,7 @@ setup(
     author_email='jef@eljef.me',
     description='Core functions for various utilities written by Jef Oliver',
     install_requires=['colorlog', 'PyYAML', 'xmltodict'],
-    license='LGPLv2.1',
+    license='0BSD',
     name='eljef-core',
     packages=['eljef.core'],
     python_requires='>=3.8',
