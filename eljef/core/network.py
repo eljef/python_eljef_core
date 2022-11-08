@@ -1,10 +1,7 @@
 # -*- coding: UTF-8 -*-
 # SPDX-License-Identifier: 0BSD
 
-"""ElJef Network operations
-
-This module holds functionality for basic network operations
-"""
+"""Basic Network Operations"""
 
 import ipaddress
 import logging

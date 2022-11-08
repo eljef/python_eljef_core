@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 # SPDX-License-Identifier: 0BSD
 
-"""ElJef Dictionary Object."""
+"""Dictionary Object"""
 
 import logging
 
@@ -120,7 +120,7 @@ class DictObj(abc.Mapping):
         return ret
 
     def update(self, new_dict: Mapping, **kwargs) -> None:
-        """Update updates the DictObj with the provided dictionary or iterable
+        """Updates the DictObj with the provided dictionary or iterable
 
         Args:
             new_dict: dictionary or iterable to update dictionary from

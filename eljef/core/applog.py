@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 # SPDX-License-Identifier: 0BSD
 
-"""ElJef Application Logging Setup."""
+"""Application Logging Setup"""
 
 import logging
 import sys

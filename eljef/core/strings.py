@@ -1,10 +1,7 @@
 # -*- coding: UTF-8 -*-
 # SPDX-License-Identifier: 0BSD
 
-"""ElJef String Operations
-
-This module holds functions for string operations
-"""
+"""String Operations"""
 
 from typing import AnyStr
 

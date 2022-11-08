@@ -1,11 +1,7 @@
 # -*- coding: UTF-8 -*-
 # SPDX-License-Identifier: 0BSD
 
-"""ElJef Directory, File, and Filesystem operations.
-
-This module holds functions for performing operations on directories, files, and filesystems (permissions for
-directories and files).
-"""
+"""Directory, File, and Filesystem Operations"""
 
 from collections import OrderedDict
 from contextlib import contextmanager

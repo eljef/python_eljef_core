@@ -1,11 +1,7 @@
 # -*- coding: UTF-8 -*-
 # SPDX-License-Identifier: 0BSD
 
-"""ElJef Merge Dictionaries
-
-This module holds functions to merge dictionaries that contain embedded
-dictionaries.
-"""
+"""Dictionary Merge Operations"""
 
 from copy import deepcopy
 

@@ -23,7 +23,8 @@ utilities written by Jef Oliver.
 Dependencies
 ElJef Core depends on the following software packages:
 
-* Python 3.6 or newer
+* Python 3.8 or newer
+* colorlog
 * pyaml
 * xmltodict
 

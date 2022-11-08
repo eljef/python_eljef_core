@@ -1,10 +1,7 @@
 # -*- coding: UTF-8 -*-
 # SPDX-License-Identifier: 0BSD
 
-"""ElJef Data Encoding and Hashing
-
-This module holds functions for encoding and hashing data.
-"""
+"""Data Encoding and Hashing"""
 
 import base64
 import hashlib

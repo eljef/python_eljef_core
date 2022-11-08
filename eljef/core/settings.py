@@ -1,10 +1,7 @@
 # -*- coding: UTF-8 -*-
 # SPDX-License-Identifier: 0BSD
 
-"""ElJef Settings Handling
-
-This module holds functionality for handling of a programs stored settings.
-"""
+"""Settings File Operations"""
 import logging
 
 from typing import Any
@@ -25,7 +22,7 @@ class Settings:
     Args:
         defaults: Dictionary of default values
         user_path: Full path to users YAML configuration file.
-        sys_path: Full path to a system wide YAML configuration file.
+        sys_path: Full path to a system-wide YAML configuration file.
 
     Note:
         The settings file is expected to be stored as YAML.

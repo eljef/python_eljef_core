@@ -1,7 +1,7 @@
 eljef.core.cli
 ==============
 
-ElJef Application CLI Functions.
+CLI Application Functionality
 
 .. autoclass:: eljef.core.cli.Arg
    :no-members:

@@ -1,11 +1,7 @@
 # -*- coding: UTF-8 -*-
 # SPDX-License-Identifier: 0BSD
 
-"""ElJef Key/Value Reading/Writing
-
-This module holds functions to read and write key/value pairs to and from single strings
-ie: data from files
-"""
+"""Key/Value Pair Operations"""
 
 from eljef.core.strings import makestr
 

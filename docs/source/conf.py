@@ -18,13 +18,13 @@ add_module_names = False
 
 project = 'ElJef Core'
 # noinspection PyShadowingBuiltins
-copyright = '2016-2021, Jef Oliver'
+copyright = '2016-2022 Jef Oliver'
 author = 'Jef Oliver'
 
 version = '2022.10.2'
 release = '2022.10.2'
 
-language = None
+language = 'en'
 
 exclude_patterns = []
 

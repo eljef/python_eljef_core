@@ -1,10 +1,8 @@
 # -*- coding: UTF-8 -*-
 # SPDX-License-Identifier: 0BSD
 
-"""ElJef Application CLI Functions.
+"""CLI Application Functionality"""
 
-This module holds functions to make setting up a CLI application easier.
-"""
 from collections import namedtuple
 from typing import List
 
@@ -12,7 +10,7 @@ import argparse
 
 
 Arg = namedtuple('Arg', 'flags opts', defaults=[[], {}])
-"""Arg holds information for adding a CLI argument.
+"""Arg holds information needed to add a CLI argument.
 
 Attributes:
     flags (list): List of flags to add. ie: [-f, --flag]
@@ -30,7 +28,7 @@ def args_simple(name: str, desc: str, args: List[Arg], exit_on_error: bool = Tru
         exit_on_error: Exit if an error is encountered
 
     Returns:
-        And argparse namespace
+        argparse.Namespace
     """
     parser = argparse.ArgumentParser(prog=name, description=desc, exit_on_error=exit_on_error)
     for arg in args:
