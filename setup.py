@@ -13,7 +13,7 @@ setup(
     packages=['eljef.core'],
     python_requires='>=3.8',
     url='https://eljef.dev/python/eljef_core',
-    version='2022.11.1',
+    version='2022.11.2',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
