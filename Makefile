@@ -59,4 +59,3 @@ versionset:
 	@sed -i -e "s/version = '$(OLDVERSION)'/version = '$(VERSION)'/" \
 	        -e "s/release = '$(OLDVERSION)'/release = '$(VERSION)'/" docs/source/conf.py
 	@sed -i -e "s/version='$(OLDVERSION)'/version='$(VERSION)'/" setup.py
-	@sed -i -e "s/pkgver=$(OLDVERSION)/pkgver=$(VERSION)/" packaging/linux/arch/PKGBUILD
