@@ -27,6 +27,7 @@ def _get_file() -> str:
 
 class TestEncodeBase64(unittest.TestCase):
     def test_encode_base64(self):
+        # noinspection SpellCheckingInspection
         want = "c29tZSBkYXRhCiAgICBzb21lIG1vcmUgZGF0YQogICAgZXZlbiBtb3JlIGRhdGEKICAgIA=="
 
         path = _get_file()
@@ -81,6 +82,7 @@ class TestHashSHA256(unittest.TestCase):
 
 class TestHashSHA512(unittest.TestCase):
     def test_hash_sha512(self):
+        # noinspection SpellCheckingInspection
         want = "d0dc6749ab8d63d5c1e3d19153150755beca1bec0b1ce14b6f8d1c36ceae4" \
                "ed9f0f398428187d7dbd17af7f72d27ad4fb83cc15270dec24c1a91444e9443402b"
 

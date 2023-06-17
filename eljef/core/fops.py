@@ -72,7 +72,7 @@ def backup_path(path: str) -> None:
     ie: file.bak file.bak.1 file.bak.2
 
     Args:
-        path: Full path to item to backup
+        path: Full path to item to back up
     """
     base_back = f"{path}.bak"
     new_path = base_back
@@ -270,7 +270,7 @@ def list_dirs_by_extension(base_path: str, file_ext: str) -> set:
     """Creates a list of directories containing files of ``file_ext``.
 
     Args:
-        base_path: Full path tot he base directory to traverse for files.
+        base_path: Full path to the base directory to traverse for files.
         file_ext: Extension for files to find. This should not contain wild cards.
 
     Returns:

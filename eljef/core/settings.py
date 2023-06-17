@@ -57,7 +57,7 @@ class Settings:
         """Reads specified yaml configuration files
 
         Args:
-            system_path: Full path to system wide YAML config file
+            system_path: Full path to system-wide YAML config file
             user_path: Full path to users YAML config file
 
         Returns:
